@@ -77,20 +77,22 @@ class TwigAssetsEngine
         $this->env = $env;
         $this->loader = $env->getLoader();
 
-        $this->options = $options = array_replace_recursive($this->options, $options);
+        $options = array_replace_recursive($this->options, $options);
 
         if (empty($options['path'])) {
             throw new Exception("The option [path] is not defined");
         }
         $this->publicCache = new AssetCache($options['path']);
 
-        if (!empty($options['cache_adapter']) && $options['cache_adapter'] instanceof AbstractAdapter) {
-            $this->cache = $options['cache_adapter'];
-        } elseif (!empty($options['cache_path'])) {
+        if (!empty($options['cache_path'])) {
             $this->cache =  new FilesystemAdapter($options['cache_name'], $options['cache_lifetime'], $options['cache_path']);
         } else {
             $this->cache = new ArrayAdapter();
         }
+
+        unset($options['cache_adapter']);
+
+        $this->options = $options;
     }
 
     /**

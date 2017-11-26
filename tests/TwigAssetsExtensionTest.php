@@ -3,12 +3,7 @@
 namespace Odan\Test;
 
 use Odan\Twig\TwigAssetsExtension;
-use org\bovigo\vfs\vfsStreamDirectory;
-use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use org\bovigo\vfs\vfsStream;
-use PHPUnit\Framework\TestCase;
-use Twig_Environment;
-use Twig_Loader_Filesystem;
 
 /**
  * AssetCacheTest
@@ -51,15 +46,15 @@ class TwigAssetsExtensionTest extends AbstractTest
     {
         $file = vfsStream::newFile('test.js')->at($this->root)->setContent('alert(1);');
         $filename = $file->url();
-        $actual = $this->extension->assets(['files' => [$filename], ['inline' => true]]);
+        $actual = $this->extension->assets(['files' => [$filename], 'inline' => true]);
         $this->assertSame('<script>alert(1);</script>', $actual);
 
         // get from cache
-        $actual2 = $this->extension->assets(['files' => [$filename], ['inline' => true]]);
+        $actual2 = $this->extension->assets(['files' => [$filename], 'inline' => true]);
         $this->assertSame('<script>alert(1);</script>', $actual2);
 
         $file->setContent('alert(2);');
-        $actual3 = $this->extension->assets(['files' => [$filename], ['inline' => true]]);
+        $actual3 = $this->extension->assets(['files' => [$filename], 'inline' => true]);
         $this->assertSame('<script>alert(2);</script>', $actual3);
     }
 

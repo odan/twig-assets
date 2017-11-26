@@ -25,7 +25,7 @@ class TwigAssetsExtension extends Twig_Extension
      * @param Twig_Environment $env
      * @param array $options
      */
-    public function __construct(Twig_Environment $env,  array $options)
+    public function __construct(Twig_Environment $env, array $options)
     {
         $this->engine = new TwigAssetsEngine($env, $options);
     }

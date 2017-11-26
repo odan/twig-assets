@@ -2,10 +2,10 @@
 
 namespace Odan\Test;
 
+use Odan\Twig\TwigAssetsEngine;
 use Odan\Twig\TwigAssetsExtension;
-use org\bovigo\vfs\vfsStreamDirectory;
-use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use org\bovigo\vfs\vfsStream;
+use org\bovigo\vfs\vfsStreamDirectory;
 use PHPUnit\Framework\TestCase;
 use Twig_Environment;
 use Twig_Loader_Filesystem;
@@ -50,10 +50,26 @@ abstract class AbstractTest extends TestCase
     protected $styleInlineRegex = '/^\<link rel=\"stylesheet\" type=\"text\/css\" href=\"cache\/[a-zA-Z0-9]{2,2}\/file\.[a-zA-Z0-9]{36}/';
 
     /**
+     * @var array
+     */
+    protected $options = [];
+
+    /**
      * Set up
      */
     public function setUp()
     {
+        $this->options = [
+            // Public assets cache directory
+            'path' => vfsStream::url('root/public/cache'),
+            // Cache settings
+            'cache_enabled' => true,
+            'cache_path' => vfsStream::url('root/tmp'),
+            'cache_name' => 'assets-cache',
+            'cache_lifetime' => 0,
+            'minify' => true
+        ];
+
         $this->root = vfsStream::setup('root');
         vfsStream::newDirectory('tmp/assets-cache')->at($this->root);
         vfsStream::newDirectory('public')->at($this->root);
@@ -61,7 +77,7 @@ abstract class AbstractTest extends TestCase
         vfsStream::newDirectory('templates')->at($this->root);
 
         $templatePath = vfsStream::url('root/templates');
-        $this->loader = new \Twig_Loader_Filesystem([$templatePath]);
+        $this->loader = new Twig_Loader_Filesystem([$templatePath]);
 
         // Add alias path: @public/ -> root/public
         $this->loader->addPath(vfsStream::url('root/public'), 'public');
@@ -81,14 +97,14 @@ abstract class AbstractTest extends TestCase
      */
     public function newExtensionInstance()
     {
-        $options = [
-            'template_path' => vfsStream::url('root/templates'),
-            'cache' => new FilesystemAdapter(sha1(__DIR__), 0, vfsStream::url('root/tmp/assets-cache')),
-            // 'public_dir' => vfsStream::url('root/public/cache'),
-            'public_path' => vfsStream::url('root/public/cache'),
-            'minify' => true
-        ];
+        return new TwigAssetsExtension($this->env, $this->options);
+    }
 
-        return new TwigAssetsExtension($this->env, $this->loader, $options);
+    /**
+     * @return TwigAssetsExtension
+     */
+    public function newTwigAssetsEngineInstance()
+    {
+        return new TwigAssetsEngine($this->env, $this->options);
     }
 }
