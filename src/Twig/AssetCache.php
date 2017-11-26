@@ -62,7 +62,7 @@ class AssetCache
      * @param string $content
      * @return string cacheFile
      */
-    protected function createPublicCacheFile($fileName, $content)
+    private function createPublicCacheFile($fileName, $content)
     {
         $extension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
         if (empty($extension)) {

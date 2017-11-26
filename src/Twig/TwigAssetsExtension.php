@@ -4,7 +4,6 @@ namespace Odan\Twig;
 
 use Twig_Environment;
 use Twig_Extension;
-use Twig_Loader_Filesystem;
 use Twig_SimpleFunction;
 
 /**
@@ -24,12 +23,11 @@ class TwigAssetsExtension extends Twig_Extension
      * TwigAssetsExtension constructor.
      *
      * @param Twig_Environment $env
-     * @param Twig_Loader_Filesystem $loader
      * @param array $options
      */
-    public function __construct(Twig_Environment $env, Twig_Loader_Filesystem $loader, array $options)
+    public function __construct(Twig_Environment $env,  array $options)
     {
-        $this->engine = new TwigAssetsEngine($env, $loader, $options);
+        $this->engine = new TwigAssetsEngine($env, $options);
     }
 
     /**

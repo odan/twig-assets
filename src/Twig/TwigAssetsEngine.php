@@ -3,10 +3,11 @@
 namespace Odan\Twig;
 
 use Exception;
-use Symfony\Component\Cache\Adapter\AbstractAdapter;
-use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Odan\CssMin\CssMinify;
 use Odan\JsMin\JsMinify;
+use Symfony\Component\Cache\Adapter\AbstractAdapter;
+use Symfony\Component\Cache\Adapter\ArrayAdapter;
+use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Twig_Environment;
 use Twig_Loader_Filesystem;
 
@@ -30,63 +31,66 @@ class TwigAssetsEngine
      *
      * @var AbstractAdapter|ArrayAdapter
      */
-    protected $cache;
+    private $cache;
 
     /**
      * Cache
      *
      * @var AssetCache AssetCache
      */
-    protected $publicCache;
+    private $publicCache;
 
     /**
-     * Template base path
-     *
-     * @var string|null
-     */
-    private $templatePath = null;
-
-    /**
-     * EDefault options.
+     * Default options.
      *
      * @var array
      */
-    protected $options = array(
+    private $options = array(
+        'cache_adapter' => null,
+        'cache_name' => 'assets-cache',
+        'cache_lifetime' => 0,
+        'cache_path' => null,
+        'path' => null,
         'minify' => true,
         'inline' => true,
-        'public_path' => null,
-        'name' => 'file'
+        'name' => 'file',
     );
 
     /**
      * Create new instance.
      *
      * @param Twig_Environment $env
-     * @param Twig_Loader_Filesystem $loader
      * @param array $options
+     * - cache_adapter: The assets cache adapter. false or AbstractAdapter
+     * - cache_name: Default is 'assets-cache'
+     * - cache_lifetime: Default is 0
+     * - cache_path: The temporary cache path
+     * - path: The public assets cache directory (e.g. public/assets)
+     * - minify: Enable JavaScript and CSS compression. The default value is true
+     * - inline: Default is true
+     * - name: The default asset name. The default value is 'file'
+     *
      * @throws Exception
      */
-    public function __construct(Twig_Environment $env, Twig_Loader_Filesystem $loader, $options)
+    public function __construct(Twig_Environment $env, array $options)
     {
         $this->env = $env;
-        $this->loader = $loader;
+        $this->loader = $env->getLoader();
 
-        if (!empty($options['cache']) && $options['cache'] instanceof AbstractAdapter) {
-            $this->cache = $options['cache'];
+        $this->options = $options = array_replace_recursive($this->options, $options);
+
+        if (empty($options['path'])) {
+            throw new Exception("The option [path] is not defined");
+        }
+        $this->publicCache = new AssetCache($options['path']);
+
+        if (!empty($options['cache_adapter']) && $options['cache_adapter'] instanceof AbstractAdapter) {
+            $this->cache = $options['cache_adapter'];
+        } elseif (!empty($options['cache_path'])) {
+            $this->cache =  new FilesystemAdapter($options['cache_name'], $options['cache_lifetime'], $options['cache_path']);
         } else {
             $this->cache = new ArrayAdapter();
         }
-
-        $this->publicCache = new AssetCache($options['public_path']);
-
-        if (empty($options['template_path'])) {
-            throw new Exception("The option [template_path] is not defined");
-        }
-        $this->templatePath = $options['template_path'];
-
-        unset($options['public_cache']);
-        unset($options['cache']);
-        $this->options = array_replace_recursive($this->options, $options);
     }
 
     /**
@@ -134,10 +138,10 @@ class TwigAssetsEngine
      * @param mixed $assets
      * @return array
      */
-    protected function prepareAssets($assets)
+    private function prepareAssets($assets)
     {
         $result = array();
-        foreach ((array) $assets as $name) {
+        foreach ((array)$assets as $name) {
             $result[] = $this->getRealFilename($name);
         }
         return $result;
@@ -184,11 +188,11 @@ class TwigAssetsEngine
      * Minimise JS.
      *
      * @param string $file Name of default JS file
-     * @param bool $minify  Minify js if true
+     * @param bool $minify Minify js if true
      *
      * @return string JavaScript code
      */
-    protected function getJsContent($file, $minify)
+    private function getJsContent($file, $minify)
     {
         $content = file_get_contents($file);
         if ($minify) {
@@ -238,8 +242,7 @@ class TwigAssetsEngine
      * Minimize CSS.
      *
      * @param string $fileName Name of default CSS file
-     * @param bool   $minify   Minify css if true
-
+     * @param bool $minify Minify css if true
      * @return string CSS code
      */
     public function getCssContent($fileName, $minify)
@@ -259,10 +262,10 @@ class TwigAssetsEngine
      * @param mixed $settings
      * @return string
      */
-    protected function getCacheKey($assets, $settings = null)
+    private function getCacheKey($assets, $settings = null)
     {
         $keys = [];
-        foreach ((array) $assets as $file) {
+        foreach ((array)$assets as $file) {
             $keys[] = sha1_file($file);
         }
         $keys[] = sha1(serialize($settings));
@@ -275,7 +278,7 @@ class TwigAssetsEngine
      * @param string $url
      * @return bool
      */
-    protected function isExternalUrl($url)
+    private function isExternalUrl($url)
     {
         return (!filter_var($url, FILTER_VALIDATE_URL) === false) && (strpos($url, 'vfs://') === false);
     }
@@ -286,7 +289,7 @@ class TwigAssetsEngine
      * @param string $file
      * @return string
      */
-    protected function getRealFilename($file)
+    private function getRealFilename($file)
     {
         if (strpos($file, 'vfs://') !== false) {
             return $file;
