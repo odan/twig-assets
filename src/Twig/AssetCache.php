@@ -59,6 +59,7 @@ class AssetCache
      * Create cache file from fileName
      *
      * @param string $fileName
+     * @param string $content
      * @return string cacheFile
      */
     protected function createPublicCacheFile($fileName, $content)

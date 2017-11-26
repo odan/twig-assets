@@ -28,7 +28,7 @@ class TwigAssetsEngine
     /**
      * Cache
      *
-     * @var AbstractAdapter
+     * @var AbstractAdapter|ArrayAdapter
      */
     protected $cache;
 
@@ -47,9 +47,9 @@ class TwigAssetsEngine
     private $templatePath = null;
 
     /**
-     * Enables minify.
+     * EDefault options.
      *
-     * @var bool
+     * @var array
      */
     protected $options = array(
         'minify' => true,
@@ -61,6 +61,8 @@ class TwigAssetsEngine
     /**
      * Create new instance.
      *
+     * @param Twig_Environment $env
+     * @param Twig_Loader_Filesystem $loader
      * @param array $options
      * @throws Exception
      */
@@ -107,7 +109,7 @@ class TwigAssetsEngine
 
         $jsFiles = [];
         $cssFiles = [];
-        foreach ((array) $assets as $file) {
+        foreach ($assets as $file) {
             $fileType = strtolower(pathinfo($file, PATHINFO_EXTENSION));
             if ($fileType == "js") {
                 $jsFiles[] = $file;

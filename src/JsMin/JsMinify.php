@@ -222,7 +222,7 @@ class JsMinify
     /**
      * Get next char. Convert ctrl char to space.
      *
-     * @return string
+     * @return string|null
      */
     protected function get()
     {
@@ -285,6 +285,8 @@ class JsMinify
                 return $get;
             }
         }
+
+        return '';
     }
 
     /**
@@ -318,6 +320,8 @@ class JsMinify
             }
             $comment .= $get;
         }
+
+        return '';
     }
 
     /**

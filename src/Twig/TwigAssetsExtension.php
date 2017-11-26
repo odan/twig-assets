@@ -14,7 +14,7 @@ class TwigAssetsExtension extends Twig_Extension
 {
 
     /**
-     * @var Twig_Environment
+     * @var TwigAssetsEngine
      */
     #private $env;
 

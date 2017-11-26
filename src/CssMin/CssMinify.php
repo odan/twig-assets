@@ -171,7 +171,7 @@ class CssMinify
 
     /**
      * Sets the PCRE backtrack limit for this script
-     * @param int $limit
+     * @param int|mixed $limit
      */
     public function set_pcre_backtrack_limit($limit)
     {
@@ -180,7 +180,7 @@ class CssMinify
 
     /**
      * Sets the PCRE recursion limit for this script
-     * @param int $limit
+     * @param int|mixed $limit
      */
     public function set_pcre_recursion_limit($limit)
     {
