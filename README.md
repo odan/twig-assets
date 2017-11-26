@@ -75,7 +75,7 @@ This Twig extension exposes a custom `assets()` function to your Twig templates.
 Name | Type | Default | Required | Description
 --- | --- | --- | --- | ---
 files | array | [] | yes | All assets to be delivered to the browser. [Namespaced Twig Paths](http://symfony.com/doc/current/templating/namespaced_paths.html) (`@mypath/`) are also supported.
-inline | bool | true | no | Defines whether the browser downloads the assets inline or via URL.
+inline | bool | false | no | Defines whether the browser downloads the assets inline or via URL.
 minify | bool | true | no | Specifies whether JS/CSS compression is enabled or disabled.
 name | string | file | no | Defines the output file name within the URL.
 
@@ -84,7 +84,13 @@ name | string | file | no | Defines the output file name within the URL.
 Output cached and minified CSS content:
 
 ```twig
-{{ assets({files: ['Login/login.css'], inline: false}) }}
+{{ assets({files: ['Login/login.css']}) }}
+```
+
+Output cached and minified CSS content inline:
+
+```twig
+{{ assets({files: ['Login/login.css'], inline: true}) }}
 ```
 
 Output multiple CSS assests into a single CSS file:
@@ -101,7 +107,7 @@ Output multiple CSS assests into a single CSS file:
 Output cached and minified JavaScript content:
 
 ```twig
-{{ assets({files: ['Login/login.js'], inline: false}) }}
+{{ assets({files: ['Login/login.js']}) }}
 ```
 
 Output multiple CSS assests into a single CSS file:
@@ -111,7 +117,7 @@ Output multiple CSS assests into a single CSS file:
     '@public/js/my-js-lib.js',
     '@public/js/notify.js',
     'Layout/app.js'
-    ], inline: false, name: 'layout.js'})
+    ], name: 'layout.js'})
 }}
 ```
 
@@ -136,8 +142,8 @@ Content of `home.twig`:
 {% extends "Layout/layout.twig" %}
 
 {% block assets %}
-    {{ assets({files: ['Home/home.js'], inline: false, name: 'home.js'}) }}
-    {{ assets({files: ['Home/home.css'], inline: false, name: 'home.css'}) }}
+    {{ assets({files: ['Home/home.js'], name: 'home.js'}) }}
+    {{ assets({files: ['Home/home.css'], name: 'home.css'}) }}
 {% endblock %}
 
 {% block content %}
