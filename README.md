@@ -25,7 +25,7 @@ $config['assets'] = [
     'path' => '/var/www/example.com/public/assets',
     // Cache settings
     'cache_enabled' => true,
-    'cache_path' => '/var/www/example.com/temp,
+    'cache_path' => '/var/www/example.com/temp',
     'cache_name' => 'assets-cache',
     // Enable JavaScript and CSS compression
     'minify' => 1
@@ -40,7 +40,7 @@ $config['assets'] = [
 
 ### Container Setup
 
-```
+```php
 $container[\Slim\Views\Twig::class] = function (Container $container) {
     $settings = $container->get('settings');
     $viewPath = $settings['twig']['path'];
@@ -65,6 +65,19 @@ $container[\Slim\Views\Twig::class] = function (Container $container) {
 ```
 
 ## Usage
+
+### Custom template functions
+
+This Twig extension exposes a custom `assets()` function to your Twig templates. You can use this function to generate complete URLs to any Slim application assets.
+
+#### Parameters
+
+Parameter | Values | Default | Description
+--- | --- | --- | ---
+--files | array | [] | All assets to be delivered to the browser. [Namespaced Twig Paths](http://symfony.com/doc/current/templating/namespaced_paths.html) (`@mypath/`) are also supported.
+--inline | bool | true | Defines whether the browser downloads the assets inline or via URL.
+--minify | bool | true | Specifies whether JS/CSS compression is enabled or disabled.
+--name | string | file | Defines the output file name within the URL.
 
 ### Template
 
