@@ -52,7 +52,7 @@ class TwigAssetsEngine
         'cache_path' => null,
         'path' => null,
         'minify' => true,
-        'inline' => true,
+        'inline' => false,
         'name' => 'file',
     );
 
@@ -67,7 +67,7 @@ class TwigAssetsEngine
      * - cache_path: The temporary cache path
      * - path: The public assets cache directory (e.g. public/assets)
      * - minify: Enable JavaScript and CSS compression. The default value is true
-     * - inline: Default is true
+     * - inline: Default is false
      * - name: The default asset name. The default value is 'file'
      *
      * @throws Exception
