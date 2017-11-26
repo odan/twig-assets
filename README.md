@@ -19,8 +19,7 @@ composer install odan/twig-assets
 ## Configuration
 
 ```php
-// Assets
-$config['assets'] = [
+$options = [
     // Public assets cache directory
     'path' => '/var/www/example.com/public/assets',
     // Cache settings
@@ -33,13 +32,26 @@ $config['assets'] = [
 ];
 ```
 
-## Slim Framework Twig View Installation
+## Integration
 
-### Requriements
+### Register the Twig Extension
+
+```php
+$loader = new Twig_Loader_Filesystem('/path/to/templates');
+$twig = new Twig_Environment($loader, array(
+    'cache' => '/path/to/compilation_cache',
+));
+
+$twig->addExtension(new \Odan\Twig\TwigAssetsExtension($twig, $options));
+```
+
+### Slim Framework
+
+Requriements
 
 * [Slim Framework Twig View](https://github.com/slimphp/Twig-View)
 
-### Container Setup
+In your `dependencies.php` or wherever you add your Service Factories:
 
 ```php
 $container[\Slim\Views\Twig::class] = function (Container $container) {
