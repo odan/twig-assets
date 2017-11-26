@@ -27,6 +27,7 @@ $config['assets'] = [
     'cache_enabled' => true,
     'cache_path' => '/var/www/example.com/temp',
     'cache_name' => 'assets-cache',
+    'cache_lifetime' => 0,
     // Enable JavaScript and CSS compression
     'minify' => 1
 ];
