@@ -72,19 +72,19 @@ This Twig extension exposes a custom `assets()` function to your Twig templates.
 
 #### Parameters
 
-Parameter | Values | Default | Description
---- | --- | --- | ---
---files | array | [] | All assets to be delivered to the browser. [Namespaced Twig Paths](http://symfony.com/doc/current/templating/namespaced_paths.html) (`@mypath/`) are also supported.
---inline | bool | true | Defines whether the browser downloads the assets inline or via URL.
---minify | bool | true | Specifies whether JS/CSS compression is enabled or disabled.
---name | string | file | Defines the output file name within the URL.
+Name | Type | Default | Required | Description
+--- | --- | --- | --- | ---
+files | array | [] | yes | All assets to be delivered to the browser. [Namespaced Twig Paths](http://symfony.com/doc/current/templating/namespaced_paths.html) (`@mypath/`) are also supported.
+inline | bool | true | no | Defines whether the browser downloads the assets inline or via URL.
+minify | bool | true | no | Specifies whether JS/CSS compression is enabled or disabled.
+name | string | file | no | Defines the output file name within the URL.
 
 ### Template
 
 Output cached and minified CSS content:
 
 ```twig
-{{ assets({files: ['Login/login.css'], inline: false, public: true}) }}
+{{ assets({files: ['Login/login.css'], inline: false}) }}
 ```
 
 Output multiple CSS assests into a single CSS file:
@@ -94,14 +94,14 @@ Output multiple CSS assests into a single CSS file:
     '@public/css/default.css',
     '@public/css/print.css',
     'User/user-edit.css'
-    ], inline: false, name: 'layout.css'})
+    ], name: 'layout.css'})
 }}
 ```
 
 Output cached and minified JavaScript content:
 
 ```twig
-{{ assets({files: ['Login/login.js'], inline: false, public: true}) }}
+{{ assets({files: ['Login/login.js'], inline: false}) }}
 ```
 
 Output multiple CSS assests into a single CSS file:
@@ -136,8 +136,8 @@ Content of `home.twig`:
 {% extends "Layout/layout.twig" %}
 
 {% block assets %}
-    {{ assets({files: ['Home/home.js'], inline: false, public: true, name: 'home.js'}) }}
-    {{ assets({files: ['Home/home.css'], inline: false, public: true, name: 'home.css'}) }}
+    {{ assets({files: ['Home/home.js'], inline: false, name: 'home.js'}) }}
+    {{ assets({files: ['Home/home.css'], inline: false, name: 'home.css'}) }}
 {% endblock %}
 
 {% block content %}
