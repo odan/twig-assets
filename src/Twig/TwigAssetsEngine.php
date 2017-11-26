@@ -35,7 +35,7 @@ class TwigAssetsEngine
     /**
      * Cache
      *
-     * @var string Path
+     * @var AssetCache AssetCache
      */
     protected $publicCache;
 
