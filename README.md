@@ -123,7 +123,7 @@ Output cached and minified JavaScript content:
 {{ assets({files: ['Login/login.js']}) }}
 ```
 
-Output multiple CSS assests into a single CSS file:
+Output multiple JavaScript assests into a single CSS file:
 
 ```twig
 {{ assets({files: [
