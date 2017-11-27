@@ -94,7 +94,7 @@ name | string | file | no | Defines the output file name within the URL.
 
 ### Template
 
-#### Output cached and minified CSS content:
+#### Output cached and minified CSS content
 
 ```twig
 {{ assets({files: ['Login/login.css']}) }}
@@ -134,7 +134,7 @@ Output multiple JavaScript assests into a single .js file:
 }}
 ```
 
-Output page specific assets:
+#### Output page specific assets
 
 Content of file: `layout.twig`
 
