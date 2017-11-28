@@ -47,7 +47,7 @@ $twig->addExtension(new \Odan\Twig\TwigAssetsExtension($twig, $options));
 
 ### Slim Framework
 
-Requriements
+Requirements
 
 * [Slim Framework Twig View](https://github.com/slimphp/Twig-View)
 
