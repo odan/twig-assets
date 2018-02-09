@@ -19,8 +19,7 @@ composer install odan/twig-assets
 ## Configuration
 
 ```php
-// Assets
-$config['assets'] = [
+$options = [
     // Public assets cache directory
     'path' => '/var/www/example.com/public/assets',
     // Cache settings
@@ -33,13 +32,26 @@ $config['assets'] = [
 ];
 ```
 
-## Slim Framework Twig View Installation
+## Integration
 
-### Requriements
+### Register the Twig Extension
+
+```php
+$loader = new Twig_Loader_Filesystem('/path/to/templates');
+$twig = new Twig_Environment($loader, array(
+    'cache' => '/path/to/compilation_cache',
+));
+
+$twig->addExtension(new \Odan\Twig\TwigAssetsExtension($twig, $options));
+```
+
+### Slim Framework
+
+Requirements
 
 * [Slim Framework Twig View](https://github.com/slimphp/Twig-View)
 
-### Container Setup
+In your `dependencies.php` or wherever you add your Service Factories:
 
 ```php
 $container[\Slim\Views\Twig::class] = function (Container $container) {
@@ -82,7 +94,7 @@ name | string | file | no | Defines the output file name within the URL.
 
 ### Template
 
-Output cached and minified CSS content:
+#### Output cached and minified CSS content
 
 ```twig
 {{ assets({files: ['Login/login.css']}) }}
@@ -94,7 +106,7 @@ Output cached and minified CSS content inline:
 {{ assets({files: ['Login/login.css'], inline: true}) }}
 ```
 
-Output multiple CSS assests into a single CSS file:
+Output multiple CSS assests into a single .css file:
 
 ```twig
 {{ assets({files: [
@@ -105,13 +117,13 @@ Output multiple CSS assests into a single CSS file:
 }}
 ```
 
-Output cached and minified JavaScript content:
+#### Output cached and minified JavaScript content
 
 ```twig
 {{ assets({files: ['Login/login.js']}) }}
 ```
 
-Output multiple CSS assests into a single CSS file:
+Output multiple JavaScript assests into a single .js file:
 
 ```twig
 {{ assets({files: [
@@ -122,7 +134,7 @@ Output multiple CSS assests into a single CSS file:
 }}
 ```
 
-Output page specific assets:
+#### Output page specific assets
 
 Content of file: `layout.twig`
 
