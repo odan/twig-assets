@@ -86,7 +86,7 @@ class JsMinify
             } elseif ($this->a === "\n") {
                 if ($this->b === ' ') {
                     $command = self::ACTION_DELETE_A_B;
-                    // in case of mbstring.func_overload & 2, must check for null b,
+                    // in case of mbstring.func_overload & 2, must check for null b
                     // otherwise mb_strpos will give WARNING
                 } elseif ($this->b === null || (false === strpos('{[(+-', $this->b) && !$this->isAlphaNum($this->b))
                 ) {
