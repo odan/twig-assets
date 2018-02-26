@@ -171,7 +171,7 @@ class TwigAssetsEngine
             if (!empty($options['inline'])) {
                 $contents[] = sprintf("<script>%s</script>", $content);
             } else {
-                $public .= $content . "";
+                $public .= sprintf("/* %s */\n", basename($asset)) . $content . "\n";
             }
         }
         if (strlen($public) > 0) {
