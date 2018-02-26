@@ -10,6 +10,7 @@ use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Twig_Environment;
 use Twig_Loader_Filesystem;
+use Twig_LoaderInterface;
 
 /**
  * Extension that adds the ability to cache and minify assets.
@@ -22,7 +23,7 @@ class TwigAssetsEngine
     private $env;
 
     /**
-     * @var Twig_Loader_Filesystem
+     * @var Twig_Loader_Filesystem|Twig_LoaderInterface
      */
     private $loader;
 
