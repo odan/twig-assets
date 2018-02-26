@@ -3,8 +3,6 @@
 namespace Odan\Test;
 
 use Odan\Twig\TwigAssetsEngine;
-use Symfony\Component\Cache\Adapter\FilesystemAdapter;
-use org\bovigo\vfs\vfsStream;
 
 /**
  * AssetCacheTest
