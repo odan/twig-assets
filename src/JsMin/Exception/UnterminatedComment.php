@@ -1,4 +1,5 @@
 <?php
+
 namespace Odan\JsMin\Exception;
 
 /**

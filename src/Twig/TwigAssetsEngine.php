@@ -86,7 +86,7 @@ class TwigAssetsEngine
         $this->publicCache = new AssetCache($options['path']);
 
         if (!empty($options['cache_path'])) {
-            $this->cache =  new FilesystemAdapter($options['cache_name'], $options['cache_lifetime'], $options['cache_path']);
+            $this->cache = new FilesystemAdapter($options['cache_name'], $options['cache_lifetime'], $options['cache_path']);
         } else {
             $this->cache = new ArrayAdapter();
         }
@@ -151,6 +151,103 @@ class TwigAssetsEngine
     }
 
     /**
+     * Returns full path and filename
+     *
+     * @param string $file
+     * @return string
+     */
+    private function getRealFilename($file)
+    {
+        if (strpos($file, 'vfs://') !== false) {
+            return $file;
+        }
+
+        return $this->loader->getSourceContext($file)->getPath();
+    }
+
+    /**
+     * Get cache key.
+     *
+     * @param mixed $assets
+     * @param mixed $settings
+     * @return string
+     */
+    private function getCacheKey($assets, $settings = null)
+    {
+        $keys = [];
+        foreach ((array)$assets as $file) {
+            $keys[] = sha1_file($file);
+        }
+        $keys[] = sha1(serialize($settings));
+        return sha1(implode('', $keys));
+    }
+
+    /**
+     * Render and compress CSS assets
+     *
+     * @param array $assets
+     * @param array $options
+     * @return string content
+     */
+    public function css($assets, $options)
+    {
+        $contents = [];
+        $public = '';
+        foreach ($assets as $asset) {
+            if ($this->isExternalUrl($asset)) {
+                // External url
+                $contents[] = sprintf('<link rel="stylesheet" type="text/css" href="%s" media="all" />', $asset);
+                continue;
+            }
+            $content = $this->getCssContent($asset, $options['minify']);
+
+            if (!empty($options['inline'])) {
+                $contents[] = sprintf("<style>%s</style>", $content);
+            } else {
+                $public .= $content . "";
+            }
+        }
+        if (strlen($public) > 0) {
+            $name = isset($options['name']) ? $options['name'] : 'file.css';
+            if (empty(pathinfo($name, PATHINFO_EXTENSION))) {
+                $name .= '.css';
+            }
+            $url = $this->publicCache->createCacheBustedUrl($name, $public);
+            $contents[] = sprintf('<link rel="stylesheet" type="text/css" href="%s" media="all" />', $url);
+        }
+        $result = implode("\n", $contents);
+        return $result;
+    }
+
+    /**
+     * Check if url is valid
+     *
+     * @param string $url
+     * @return bool
+     */
+    private function isExternalUrl($url)
+    {
+        return (!filter_var($url, FILTER_VALIDATE_URL) === false) && (strpos($url, 'vfs://') === false);
+    }
+
+    /**
+     * Minimize CSS.
+     *
+     * @param string $fileName Name of default CSS file
+     * @param bool $minify Minify css if true
+     * @return string CSS code
+     */
+    public function getCssContent($fileName, $minify)
+    {
+        $content = file_get_contents($fileName);
+        if ($minify) {
+            $compressor = new CssMinify();
+            $content = $compressor->run($content);
+        }
+        return $content;
+    }
+
+    /**
      * Render and compress CSS assets
      *
      * @param array $assets
@@ -202,102 +299,5 @@ class TwigAssetsEngine
             $content = JsMinify::minify($content);
         }
         return $content;
-    }
-
-    /**
-     * Render and compress CSS assets
-     *
-     * @param array $assets
-     * @param array $options
-     * @return string content
-     */
-    public function css($assets, $options)
-    {
-        $contents = [];
-        $public = '';
-        foreach ($assets as $asset) {
-            if ($this->isExternalUrl($asset)) {
-                // External url
-                $contents[] = sprintf('<link rel="stylesheet" type="text/css" href="%s" media="all" />', $asset);
-                continue;
-            }
-            $content = $this->getCssContent($asset, $options['minify']);
-
-            if (!empty($options['inline'])) {
-                $contents[] = sprintf("<style>%s</style>", $content);
-            } else {
-                $public .= $content . "";
-            }
-        }
-        if (strlen($public) > 0) {
-            $name = isset($options['name']) ? $options['name'] : 'file.css';
-            if (empty(pathinfo($name, PATHINFO_EXTENSION))) {
-                $name .= '.css';
-            }
-            $url = $this->publicCache->createCacheBustedUrl($name, $public);
-            $contents[] = sprintf('<link rel="stylesheet" type="text/css" href="%s" media="all" />', $url);
-        }
-        $result = implode("\n", $contents);
-        return $result;
-    }
-
-    /**
-     * Minimize CSS.
-     *
-     * @param string $fileName Name of default CSS file
-     * @param bool $minify Minify css if true
-     * @return string CSS code
-     */
-    public function getCssContent($fileName, $minify)
-    {
-        $content = file_get_contents($fileName);
-        if ($minify) {
-            $compressor = new CssMinify();
-            $content = $compressor->run($content);
-        }
-        return $content;
-    }
-
-    /**
-     * Get cache key.
-     *
-     * @param mixed $assets
-     * @param mixed $settings
-     * @return string
-     */
-    private function getCacheKey($assets, $settings = null)
-    {
-        $keys = [];
-        foreach ((array)$assets as $file) {
-            $keys[] = sha1_file($file);
-        }
-        $keys[] = sha1(serialize($settings));
-        return sha1(implode('', $keys));
-    }
-
-    /**
-     * Check if url is valid
-     *
-     * @param string $url
-     * @return bool
-     */
-    private function isExternalUrl($url)
-    {
-        return (!filter_var($url, FILTER_VALIDATE_URL) === false) && (strpos($url, 'vfs://') === false);
-    }
-
-    /**
-     * Returns full path and filename
-     *
-     * @param string $file
-     * @return string
-     */
-    private function getRealFilename($file)
-    {
-        if (strpos($file, 'vfs://') !== false) {
-            return $file;
-        }
-
-        return $this->loader->getSourceContext($file)->getPath();
     }
 }

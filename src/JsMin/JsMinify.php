@@ -3,8 +3,8 @@
 namespace Odan\JsMin;
 
 use Odan\JsMin\Exception\UnterminatedComment;
-use Odan\JsMin\Exception\UnterminatedString;
 use Odan\JsMin\Exception\UnterminatedRegExp;
+use Odan\JsMin\Exception\UnterminatedString;
 
 /**
  * Minify.
@@ -31,6 +31,14 @@ class JsMinify
     protected $lastByteOut = '';
 
     /**
+     * @param string $input
+     */
+    public function __construct($input)
+    {
+        $this->input = $input;
+    }
+
+    /**
      * Minify Javascript.
      *
      * @param string $js Javascript to be minified
@@ -41,14 +49,6 @@ class JsMinify
     {
         $jsmin = new static($js);
         return $jsmin->min();
-    }
-
-    /**
-     * @param string $input
-     */
-    public function __construct($input)
-    {
-        $this->input = $input;
     }
 
     /**
@@ -63,7 +63,7 @@ class JsMinify
         }
 
         $mbIntEnc = null;
-        if (function_exists('mb_strlen') && ((int) ini_get('mbstring.func_overload') & 2)) {
+        if (function_exists('mb_strlen') && ((int)ini_get('mbstring.func_overload') & 2)) {
             $mbIntEnc = mb_internal_encoding();
             mb_internal_encoding('8bit');
         }
@@ -86,7 +86,7 @@ class JsMinify
             } elseif ($this->a === "\n") {
                 if ($this->b === ' ') {
                     $command = self::ACTION_DELETE_A_B;
-                // in case of mbstring.func_overload & 2, must check for null b,
+                    // in case of mbstring.func_overload & 2, must check for null b,
                     // otherwise mb_strpos will give WARNING
                 } elseif ($this->b === null || (false === strpos('{[(+-', $this->b) && !$this->isAlphaNum($this->b))
                 ) {
@@ -194,34 +194,6 @@ class JsMinify
     }
 
     /**
-     * @return bool
-     */
-    protected function isRegexpLiteral()
-    {
-        if (false !== strpos("\n{;(,=:[!&|?", $this->a)) { // we aren't dividing
-            return true;
-        }
-        if (' ' === $this->a) {
-            $length = strlen($this->output);
-            if ($length < 2) { // weird edge case
-                return true;
-            }
-            // you can't divide a keyword
-            if (preg_match('/(?:case|else|in|return|typeof)$/', $this->output, $m)) {
-                if ($this->output === $m[0]) { // odd but could happen
-                    return true;
-                }
-                // make sure it's a keyword, not end of an identifier
-                $charBeforeKeyword = substr($this->output, $length - strlen($m[0]) - 1, 1);
-                if (!$this->isAlphaNum($charBeforeKeyword)) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    /**
      * Get next char. Convert ctrl char to space.
      *
      * @return string|null
@@ -248,6 +220,28 @@ class JsMinify
     }
 
     /**
+     * Get the next character, skipping over comments.
+     * Some comments may be preserved.
+     *
+     * @return string
+     */
+    protected function next()
+    {
+        $get = $this->get();
+        if ($get !== '/') {
+            return $get;
+        }
+        switch ($this->peek()) {
+            case '/':
+                return $this->singleLineComment();
+            case '*':
+                return $this->multipleLineComment();
+            default:
+                return $get;
+        }
+    }
+
+    /**
      * Get next char. If is ctrl character, translate to a space or newline.
      *
      * @return string
@@ -256,18 +250,6 @@ class JsMinify
     {
         $this->lookAhead = $this->get();
         return $this->lookAhead;
-    }
-
-    /**
-     * Is $c a letter, digit, underscore, dollar sign, escape, or non-ASCII?
-     *
-     * @param string $c
-     *
-     * @return bool
-     */
-    protected function isAlphaNum($c)
-    {
-        return (preg_match('/^[0-9a-zA-Z_\\$\\\\]$/', $c) || ord($c) > 126);
     }
 
     /**
@@ -327,24 +309,42 @@ class JsMinify
     }
 
     /**
-     * Get the next character, skipping over comments.
-     * Some comments may be preserved.
-     *
-     * @return string
+     * @return bool
      */
-    protected function next()
+    protected function isRegexpLiteral()
     {
-        $get = $this->get();
-        if ($get !== '/') {
-            return $get;
+        if (false !== strpos("\n{;(,=:[!&|?", $this->a)) { // we aren't dividing
+            return true;
         }
-        switch ($this->peek()) {
-            case '/':
-                return $this->singleLineComment();
-            case '*':
-                return $this->multipleLineComment();
-            default:
-                return $get;
+        if (' ' === $this->a) {
+            $length = strlen($this->output);
+            if ($length < 2) { // weird edge case
+                return true;
+            }
+            // you can't divide a keyword
+            if (preg_match('/(?:case|else|in|return|typeof)$/', $this->output, $m)) {
+                if ($this->output === $m[0]) { // odd but could happen
+                    return true;
+                }
+                // make sure it's a keyword, not end of an identifier
+                $charBeforeKeyword = substr($this->output, $length - strlen($m[0]) - 1, 1);
+                if (!$this->isAlphaNum($charBeforeKeyword)) {
+                    return true;
+                }
+            }
         }
+        return false;
+    }
+
+    /**
+     * Is $c a letter, digit, underscore, dollar sign, escape, or non-ASCII?
+     *
+     * @param string $c
+     *
+     * @return bool
+     */
+    protected function isAlphaNum($c)
+    {
+        return (preg_match('/^[0-9a-zA-Z_\\$\\\\]$/', $c) || ord($c) > 126);
     }
 }
