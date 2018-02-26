@@ -12,7 +12,6 @@ use org\bovigo\vfs\vfsStream;
  */
 class AssetCacheTest extends AbstractTest
 {
-
     protected $cacheBustedRegex = '/^cache\/[a-zA-Z0-9]{2,2}\/cache\.[a-zA-Z0-9]{36}/';
 
     /**
