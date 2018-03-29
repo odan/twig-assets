@@ -27,7 +27,7 @@ build:
         neo4j: false
         rabbitmq: false
     tests:
-        override:
+        before:
             -
                 command: 'vendor/bin/phpunit --coverage-clover build/logs/clover.xml'
                 coverage:
