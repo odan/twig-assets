@@ -10,6 +10,7 @@ use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Twig_Environment;
 use Twig_Loader_Filesystem;
+use Twig_LoaderInterface;
 
 /**
  * Extension that adds the ability to cache and minify assets.
@@ -22,7 +23,7 @@ class TwigAssetsEngine
     private $env;
 
     /**
-     * @var Twig_Loader_Filesystem
+     * @var Twig_Loader_Filesystem|Twig_LoaderInterface
      */
     private $loader;
 
@@ -85,7 +86,7 @@ class TwigAssetsEngine
         $this->publicCache = new AssetCache($options['path']);
 
         if (!empty($options['cache_path'])) {
-            $this->cache =  new FilesystemAdapter($options['cache_name'], $options['cache_lifetime'], $options['cache_path']);
+            $this->cache = new FilesystemAdapter($options['cache_name'], $options['cache_lifetime'], $options['cache_path']);
         } else {
             $this->cache = new ArrayAdapter();
         }
@@ -150,57 +151,35 @@ class TwigAssetsEngine
     }
 
     /**
-     * Render and compress CSS assets
+     * Returns full path and filename
      *
-     * @param array $assets
-     * @param array $options
-     * @return string content
+     * @param string $file
+     * @return string
      */
-    public function js($assets, $options)
+    private function getRealFilename($file)
     {
-        $contents = [];
-        $public = '';
-        foreach ($assets as $asset) {
-            if ($this->isExternalUrl($asset)) {
-                // External url
-                $contents[] = sprintf('<script src="%s"></script>', $asset);
-                continue;
-            }
-            $content = $this->getJsContent($asset, $options['minify']);
+        if (strpos($file, 'vfs://') !== false) {
+            return $file;
+        }
 
-            if (!empty($options['inline'])) {
-                $contents[] = sprintf("<script>%s</script>", $content);
-            } else {
-                $public .= $content . "";
-            }
-        }
-        if (strlen($public) > 0) {
-            $name = isset($options['name']) ? $options['name'] : 'file.js';
-            if (empty(pathinfo($name, PATHINFO_EXTENSION))) {
-                $name .= '.js';
-            }
-            $url = $this->publicCache->createCacheBustedUrl($name, $public);
-            $contents[] = sprintf('<script src="%s"></script>', $url);
-        }
-        $result = implode("\n", $contents);
-        return $result;
+        return $this->loader->getSourceContext($file)->getPath();
     }
 
     /**
-     * Minimise JS.
+     * Get cache key.
      *
-     * @param string $file Name of default JS file
-     * @param bool $minify Minify js if true
-     *
-     * @return string JavaScript code
+     * @param mixed $assets
+     * @param mixed $settings
+     * @return string
      */
-    private function getJsContent($file, $minify)
+    private function getCacheKey($assets, $settings = null)
     {
-        $content = file_get_contents($file);
-        if ($minify) {
-            $content = JsMinify::minify($content);
+        $keys = [];
+        foreach ((array)$assets as $file) {
+            $keys[] = sha1_file($file);
         }
-        return $content;
+        $keys[] = sha1(serialize($settings));
+        return sha1(implode('', $keys));
     }
 
     /**
@@ -241,6 +220,17 @@ class TwigAssetsEngine
     }
 
     /**
+     * Check if url is valid
+     *
+     * @param string $url
+     * @return bool
+     */
+    private function isExternalUrl($url)
+    {
+        return (!filter_var($url, FILTER_VALIDATE_URL) === false) && (strpos($url, 'vfs://') === false);
+    }
+
+    /**
      * Minimize CSS.
      *
      * @param string $fileName Name of default CSS file
@@ -258,45 +248,56 @@ class TwigAssetsEngine
     }
 
     /**
-     * Get cache key.
+     * Render and compress CSS assets
      *
-     * @param mixed $assets
-     * @param mixed $settings
-     * @return string
+     * @param array $assets
+     * @param array $options
+     * @return string content
      */
-    private function getCacheKey($assets, $settings = null)
+    public function js($assets, $options)
     {
-        $keys = [];
-        foreach ((array)$assets as $file) {
-            $keys[] = sha1_file($file);
+        $contents = [];
+        $public = '';
+        foreach ($assets as $asset) {
+            if ($this->isExternalUrl($asset)) {
+                // External url
+                $contents[] = sprintf('<script src="%s"></script>', $asset);
+                continue;
+            }
+            $content = $this->getJsContent($asset, $options['minify']);
+
+            if (!empty($options['inline'])) {
+                $contents[] = sprintf("<script>%s</script>", $content);
+            } else {
+                $public .= sprintf("/* %s */\n", basename($asset)) . $content . "\n";
+            }
         }
-        $keys[] = sha1(serialize($settings));
-        return sha1(implode('', $keys));
+        if (strlen($public) > 0) {
+            $name = isset($options['name']) ? $options['name'] : 'file.js';
+            if (empty(pathinfo($name, PATHINFO_EXTENSION))) {
+                $name .= '.js';
+            }
+            $url = $this->publicCache->createCacheBustedUrl($name, $public);
+            $contents[] = sprintf('<script src="%s"></script>', $url);
+        }
+        $result = implode("\n", $contents);
+        return $result;
     }
 
     /**
-     * Check if url is valid
+     * Minimise JS.
      *
-     * @param string $url
-     * @return bool
-     */
-    private function isExternalUrl($url)
-    {
-        return (!filter_var($url, FILTER_VALIDATE_URL) === false) && (strpos($url, 'vfs://') === false);
-    }
-
-    /**
-     * Returns full path and filename
+     * @param string $file Name of default JS file
+     * @param bool $minify Minify js if true
      *
-     * @param string $file
-     * @return string
+     * @return string JavaScript code
      */
-    private function getRealFilename($file)
+    private function getJsContent($file, $minify)
     {
-        if (strpos($file, 'vfs://') !== false) {
-            return $file;
+        $content = file_get_contents($file);
+        if ($minify) {
+            $content = JsMinify::minify($content);
         }
-
-        return $this->loader->getSourceContext($file)->getPath();
+        return $content;
     }
 }

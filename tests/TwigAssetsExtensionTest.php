@@ -112,7 +112,7 @@ class TwigAssetsExtensionTest extends AbstractTest
         file_put_contents($realFileUrl, 'alert(4);');
         $actual3 = $this->extension->assets(['files' => [$filename], 'inline' => false]);
         $this->assertRegExp($this->scriptInlineRegex, $actual3);
-        $this->assertNotEquals($actual2, $actual3);
+        $this->assertNotSame($actual2, $actual3);
     }
 
     /**

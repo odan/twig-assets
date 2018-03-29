@@ -2,7 +2,7 @@
 
 namespace Odan\Twig;
 
-use Exception;
+use RuntimeException;
 
 /**
  * Asset Cache for public JS ans CSS files
@@ -20,15 +20,14 @@ class AssetCache
      * Create new instance.
      *
      * @param string $publicDir
-     * @throws Exception
+     * @throws RuntimeException
      */
     public function __construct($publicDir)
     {
-        if (isset($publicDir)) {
-            $this->publicDir = $publicDir;
-        }
+        $this->publicDir = $publicDir;
+
         if (!file_exists($this->publicDir)) {
-            throw new Exception("Path {$this->publicDir} not found");
+            throw new RuntimeException("Path {$this->publicDir} not found");
         }
     }
 

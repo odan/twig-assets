@@ -101,7 +101,8 @@ abstract class AbstractTest extends TestCase
     }
 
     /**
-     * @return TwigAssetsExtension
+     * @return TwigAssetsEngine
+     * @throws \Exception
      */
     public function newTwigAssetsEngineInstance()
     {
