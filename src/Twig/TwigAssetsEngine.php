@@ -65,7 +65,7 @@ class TwigAssetsEngine
      * - cache_name: Default is 'assets-cache'
      * - cache_lifetime: Default is 0
      * - cache_path: The temporary cache path
-     * - path: The public assets cache directory (e.g. public/assets)
+     * - path: The public assets cache directory (e.g. public/cache)
      * - minify: Enable JavaScript and CSS compression. The default value is true
      * - inline: Default is false
      * - name: The default asset name. The default value is 'file'
