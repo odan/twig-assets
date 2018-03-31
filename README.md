@@ -21,10 +21,10 @@ composer install odan/twig-assets
 ```php
 $options = [
     // Public assets cache directory
-    'path' => '/var/www/example.com/public/cache',
+    'path' => '/var/www/example.com/htdocs/public/cache',
     // Cache settings
     'cache_enabled' => true,
-    'cache_path' => '/var/www/example.com/temp',
+    'cache_path' => '/var/www/example.com/htdocs/temp',
     'cache_name' => 'assets-cache',
     'cache_lifetime' => 0,
     // Enable JavaScript and CSS compression
