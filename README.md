@@ -21,7 +21,7 @@ composer install odan/twig-assets
 ```php
 $options = [
     // Public assets cache directory
-    'path' => '/var/www/example.com/public/assets',
+    'path' => '/var/www/example.com/public/cache',
     // Cache settings
     'cache_enabled' => true,
     'cache_path' => '/var/www/example.com/temp',
