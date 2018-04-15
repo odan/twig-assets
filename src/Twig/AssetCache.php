@@ -45,9 +45,9 @@ class AssetCache
         $name = pathinfo($cacheFile, PATHINFO_BASENAME);
         $dir = pathinfo($cacheFile, PATHINFO_DIRNAME);
         $dirs = explode('/', $dir);
-        // Folder: cache/ab
-        $cacheDirs = array_slice($dirs, count($dirs) - 2);
-        // Folder: cache/ab/filename.ext
+        // Folder: cache/
+        $cacheDirs = array_slice($dirs, count($dirs) - 1);
+        // Folder: cache/filename.ext
         $path = implode('/', $cacheDirs) . '/' . $name;
         // Create url
         $cacheUrl = $path;
@@ -69,13 +69,7 @@ class AssetCache
         }
         $name = pathinfo($fileName, PATHINFO_FILENAME);
         $checksum = sha1($fileName . $content);
-        $checksumDir = $this->publicDir . '/' . substr($checksum, 0, 2);
-        $cacheFile = $checksumDir . '/' . $name . '.' . substr($checksum, 2) . '.' . $extension;
-
-        // create cache dir
-        if (!file_exists($checksumDir)) {
-            mkdir($checksumDir, 0775, true);
-        }
+        $cacheFile = $this->publicDir . '/' . $name . '.' . $checksum . '.' . $extension;
 
         file_put_contents($cacheFile, $content);
         chmod($cacheFile, 0775);

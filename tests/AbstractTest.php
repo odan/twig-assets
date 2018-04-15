@@ -36,18 +36,18 @@ abstract class AbstractTest extends TestCase
     protected $root;
 
     /**
-     * <script src="/cache/ab/file.96ce14164e1f92eb0ec93044a005be906f56d4.js"></script>
+     * <script src="/cache/file.96ce14164e1f92eb0ec93044a005be906f56d4.js"></script>
      *
      * @var string
      */
-    protected $scriptInlineRegex = '/^\<script src=\"cache\/[a-zA-Z0-9]{2,2}\/file\.[a-zA-Z0-9]{36}/';
+    protected $scriptInlineRegex = '/^\<script src=\"cache\/file\.[a-zA-Z0-9]{36}/';
 
     /**
-     * <link rel="stylesheet" type="text/css" href="cache/d6/file.c736045df3ebc9fc934d653ecb8738d0955d15.css" media="all" />
+     * <link rel="stylesheet" type="text/css" href="cache/file.c736045df3ebc9fc934d653ecb8738d0955d15.css" media="all" />
      *
      * @var string
      */
-    protected $styleInlineRegex = '/^\<link rel=\"stylesheet\" type=\"text\/css\" href=\"cache\/[a-zA-Z0-9]{2,2}\/file\.[a-zA-Z0-9]{36}/';
+    protected $styleInlineRegex = '/^\<link rel=\"stylesheet\" type=\"text\/css\" href=\"cache\/file\.[a-zA-Z0-9]{36}/';
 
     /**
      * @var array
