@@ -6,13 +6,12 @@ use Odan\Twig\TwigAssetsExtension;
 use org\bovigo\vfs\vfsStream;
 
 /**
- * AssetCacheTest
+ * AssetCacheTest.
  *
  * @coversDefaultClass \Odan\Twig\TwigAssetsExtension
  */
 class TwigAssetsExtensionTest extends AbstractTest
 {
-
     /**
      * Test create object.
      *
@@ -130,13 +129,13 @@ class TwigAssetsExtensionTest extends AbstractTest
      */
     public function testCssDefault()
     {
-        $content = "body {
+        $content = 'body {
             /* background-color: #F4F4F4; */
             background-color: #f9fafa;
             /* background-color: #f8f8f8; */
             /* 60px to make the container go all the way to the bottom of the topbar */
             padding-top: 60px;
-        }";
+        }';
 
         $file = vfsStream::newFile('test.css')->at($this->root)->setContent($content);
         $filename = $file->url();

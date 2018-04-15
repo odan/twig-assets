@@ -5,12 +5,12 @@ namespace Odan\Twig;
 use RuntimeException;
 
 /**
- * Asset Cache for public JS ans CSS files
+ * Asset Cache for public JS ans CSS files.
  */
 class AssetCache
 {
     /**
-     * Cache
+     * Cache.
      *
      * @var string Path
      */
@@ -20,6 +20,7 @@ class AssetCache
      * Create new instance.
      *
      * @param string $publicDir
+     *
      * @throws RuntimeException
      */
     public function __construct($publicDir)
@@ -32,10 +33,11 @@ class AssetCache
     }
 
     /**
-     * Returns url for filename
+     * Returns url for filename.
      *
      * @param string $fileName
      * @param string $content
+     *
      * @return string
      */
     public function createCacheBustedUrl($fileName, $content)
@@ -51,14 +53,16 @@ class AssetCache
         $path = implode('/', $cacheDirs) . '/' . $name;
         // Create url
         $cacheUrl = $path;
+
         return $cacheUrl;
     }
 
     /**
-     * Create cache file from fileName
+     * Create cache file from fileName.
      *
      * @param string $fileName
      * @param string $content
+     *
      * @return string cacheFile
      */
     private function createPublicCacheFile($fileName, $content)
@@ -73,6 +77,7 @@ class AssetCache
 
         file_put_contents($cacheFile, $content);
         chmod($cacheFile, 0775);
+
         return $cacheFile;
     }
 }

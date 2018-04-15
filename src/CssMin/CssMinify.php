@@ -54,9 +54,11 @@ class CssMinify
     }
 
     /**
-     * Minify a string of CSS
+     * Minify a string of CSS.
+     *
      * @param string $css
      * @param int|bool $linebreak_pos
+     *
      * @return string
      */
     public function run($css = '', $linebreak_pos = false)
@@ -69,8 +71,8 @@ class CssMinify
             $this->do_raise_php_limits();
         }
 
-        $this->comments = array();
-        $this->preserved_tokens = array();
+        $this->comments = [];
+        $this->preserved_tokens = [];
 
         $start_index = 0;
         $length = strlen($css);
@@ -92,7 +94,7 @@ class CssMinify
         }
 
         // preserve strings so their content doesn't get accidentally minified
-        $css = preg_replace_callback('/(?:"(?:[^\\\\"]|\\\\.|\\\\)*")|' . "(?:'(?:[^\\\\']|\\\\.|\\\\)*')/S", array($this, 'replace_string'), $css);
+        $css = preg_replace_callback('/(?:"(?:[^\\\\"]|\\\\.|\\\\)*")|' . "(?:'(?:[^\\\\']|\\\\.|\\\\)*')/S", [$this, 'replace_string'], $css);
 
         // Let's divide css code in chunks of 5.000 chars aprox.
         // Reason: PHP's PCRE functions like preg_replace have a "backtrack limit"
@@ -102,12 +104,11 @@ class CssMinify
         // returning NULL and $css would be empty.
         $charset = '';
         $charset_regexp = '/(@charset)( [^;]+;)/i';
-        $css_chunks = array();
+        $css_chunks = [];
         $css_chunk_length = 5000; // aprox size, not exact
         $start_index = 0;
         $i = $css_chunk_length; // save initial iterations
         $l = strlen($css);
-
 
         // if the number of characters is 5000 or less, do not chunk
         if ($l <= $css_chunk_length) {
@@ -152,16 +153,16 @@ class CssMinify
     }
 
     /**
-     * Try to configure PHP to use at least the suggested minimum settings
+     * Try to configure PHP to use at least the suggested minimum settings.
      */
     private function do_raise_php_limits()
     {
-        $php_limits = array(
+        $php_limits = [
             'memory_limit' => $this->memory_limit,
             'max_execution_time' => $this->max_execution_time,
             'pcre.backtrack_limit' => $this->pcre_backtrack_limit,
-            'pcre.recursion_limit' => $this->pcre_recursion_limit
-        );
+            'pcre.recursion_limit' => $this->pcre_recursion_limit,
+        ];
 
         // If current settings are higher respect them.
         foreach ($php_limits as $name => $suggested) {
@@ -174,8 +175,10 @@ class CssMinify
     }
 
     /**
-     * Convert strings like "64M" or "30" to int values
+     * Convert strings like "64M" or "30" to int values.
+     *
      * @param mixed $size
+     *
      * @return int
      */
     private function normalize_int($size)
@@ -203,6 +206,7 @@ class CssMinify
      * regexes against large strings chunks.
      *
      * @param string $css
+     *
      * @return string
      */
     private function extract_data_urls($css)
@@ -210,7 +214,7 @@ class CssMinify
         // Leave data urls alone to increase parse performance.
         $max_index = strlen($css) - 1;
         $append_index = $index = $last_index = $offset = 0;
-        $sb = array();
+        $sb = [];
         $pattern = '/url\(\s*(["\']?)data\:/i';
 
         // Since we need to account for non-base64 data urls, we need to handle
@@ -270,11 +274,12 @@ class CssMinify
 
     /**
      * PHP port of Javascript's "indexOf" function for strings only
-     * Author: Tubal Martin http://blog.margenn.com
+     * Author: Tubal Martin http://blog.margenn.com.
      *
      * @param string $haystack
      * @param string $needle
      * @param int $offset index (optional)
+     *
      * @return int
      */
     private function index_of($haystack, $needle, $offset = 0)
@@ -287,11 +292,12 @@ class CssMinify
     /**
      * PHP port of Javascript's "slice" function for strings only
      * Author: Tubal Martin http://blog.margenn.com
-     * Tests: http://margenn.com/tubal/str_slice/
+     * Tests: http://margenn.com/tubal/str_slice/.
      *
      * @param string $str
      * @param int $start index
      * @param int|bool $end index (optional)
+     *
      * @return string
      */
     private function str_slice($str, $start = 0, $end = false)
@@ -317,13 +323,16 @@ class CssMinify
         }
 
         $slice = ($end === false) ? substr($str, $start) : substr($str, $start, $end - $start);
+
         return ($slice === false) ? '' : $slice;
     }
 
     /**
-     * Does bulk of the minification
+     * Does bulk of the minification.
+     *
      * @param string $css
      * @param int|bool $linebreak_pos
+     *
      * @return string
      */
     private function minify($css, $linebreak_pos)
@@ -372,15 +381,14 @@ class CssMinify
             $css = preg_replace('/\/\*' . $this->str_slice($placeholder, 1, -1) . '\*\//', '', $css, 1);
         }
 
-
         // Normalize all whitespace strings to single spaces. Easier to work with that way.
         $css = preg_replace('/\s+/', ' ', $css);
 
         // Fix IE7 issue on matrix filters which browser accept whitespaces between Matrix parameters
-        $css = preg_replace_callback('/\s*filter\:\s*progid:DXImageTransform\.Microsoft\.Matrix\(([^\)]+)\)/', array($this, 'preserve_old_IE_specific_matrix_definition'), $css);
+        $css = preg_replace_callback('/\s*filter\:\s*progid:DXImageTransform\.Microsoft\.Matrix\(([^\)]+)\)/', [$this, 'preserve_old_IE_specific_matrix_definition'], $css);
 
         // Shorten & preserve calculations calc(...) since spaces are important
-        $css = preg_replace_callback('/calc(\(((?:[^\(\)]+|(?1))*)\))/i', array($this, 'replace_calc'), $css);
+        $css = preg_replace_callback('/calc(\(((?:[^\(\)]+|(?1))*)\))/i', [$this, 'replace_calc'], $css);
 
         // Replace positive sign from numbers preceded by : or a white-space before the leading space is removed
         // +1.2em to 1.2em, +.8px to .8px, +2% to 2%
@@ -403,7 +411,7 @@ class CssMinify
         // Remove the spaces before the things that should not have spaces before them.
         // But, be careful not to turn "p :link {...}" into "p:link{...}"
         // Swap out any pseudo-class colons with the token, and then swap back.
-        $css = preg_replace_callback('/(?:^|\})[^\{]*\s+\:/', array($this, 'replace_colon'), $css);
+        $css = preg_replace_callback('/(?:^|\})[^\{]*\s+\:/', [$this, 'replace_colon'], $css);
 
         // Remove spaces before the things that should not have spaces before them.
         $css = preg_replace('/\s+([\!\{\}\;\:\>\+\(\)\]\~\=,])/', '$1', $css);
@@ -415,23 +423,23 @@ class CssMinify
         $css = preg_replace('/' . self::CLASSCOLON . '/', ':', $css);
 
         // retain space for special IE6 cases
-        $css = preg_replace_callback('/\:first\-(line|letter)(\{|,)/i', array($this, 'lowercase_pseudo_first'), $css);
+        $css = preg_replace_callback('/\:first\-(line|letter)(\{|,)/i', [$this, 'lowercase_pseudo_first'], $css);
 
         // no space after the end of a preserved comment
         $css = preg_replace('/\*\/ /', '*/', $css);
 
         // lowercase some popular @directives
-        $css = preg_replace_callback('/@(font-face|import|(?:-(?:atsc|khtml|moz|ms|o|wap|webkit)-)?keyframe|media|page|namespace)/i', array($this, 'lowercase_directives'), $css);
+        $css = preg_replace_callback('/@(font-face|import|(?:-(?:atsc|khtml|moz|ms|o|wap|webkit)-)?keyframe|media|page|namespace)/i', [$this, 'lowercase_directives'], $css);
 
         // lowercase some more common pseudo-elements
-        $css = preg_replace_callback('/:(active|after|before|checked|disabled|empty|enabled|first-(?:child|of-type)|focus|hover|last-(?:child|of-type)|link|only-(?:child|of-type)|root|:selection|target|visited)/i', array($this, 'lowercase_pseudo_elements'), $css);
+        $css = preg_replace_callback('/:(active|after|before|checked|disabled|empty|enabled|first-(?:child|of-type)|focus|hover|last-(?:child|of-type)|link|only-(?:child|of-type)|root|:selection|target|visited)/i', [$this, 'lowercase_pseudo_elements'], $css);
 
         // lowercase some more common functions
-        $css = preg_replace_callback('/:(lang|not|nth-child|nth-last-child|nth-last-of-type|nth-of-type|(?:-(?:moz|webkit)-)?any)\(/i', array($this, 'lowercase_common_functions'), $css);
+        $css = preg_replace_callback('/:(lang|not|nth-child|nth-last-child|nth-last-of-type|nth-of-type|(?:-(?:moz|webkit)-)?any)\(/i', [$this, 'lowercase_common_functions'], $css);
 
         // lower case some common function that can be values
         // NOTE: rgb() isn't useful as we replace with #hex later, as well as and() is already done for us
-        $css = preg_replace_callback('/([:,\( ]\s*)(attr|color-stop|from|rgba|to|url|(?:-(?:atsc|khtml|moz|ms|o|wap|webkit)-)?(?:calc|max|min|(?:repeating-)?(?:linear|radial)-gradient)|-webkit-gradient)/iS', array($this, 'lowercase_common_functions_values'), $css);
+        $css = preg_replace_callback('/([:,\( ]\s*)(attr|color-stop|from|rgba|to|url|(?:-(?:atsc|khtml|moz|ms|o|wap|webkit)-)?(?:calc|max|min|(?:repeating-)?(?:linear|radial)-gradient)|-webkit-gradient)/iS', [$this, 'lowercase_common_functions_values'], $css);
 
         // Put the space back in some cases, to support stuff like
         // @media screen and (-webkit-min-device-pixel-ratio:0){
@@ -454,7 +462,7 @@ class CssMinify
         $css = preg_replace('/([^\\\\]\:|\s)0(?:em|ex|ch|rem|vw|vh|vm|vmin|cm|mm|in|px|pt|pc|%)/iS', '${1}0', $css);
 
         // 0% step in a keyframe? restore the % unit
-        $css = preg_replace_callback('/(@[a-z\-]*?keyframes[^\{]+\{)(.*?)(\}\})/iS', array($this, 'replace_keyframe_zero'), $css);
+        $css = preg_replace_callback('/(@[a-z\-]*?keyframes[^\{]+\{)(.*?)(\}\})/iS', [$this, 'replace_keyframe_zero'], $css);
 
         // Replace 0 0; or 0 0 0; or 0 0 0 0; with 0.
         $css = preg_replace('/\:0(?: 0){1,3}(;|\}| \!)/', ':0$1', $css);
@@ -471,8 +479,8 @@ class CssMinify
         // Shorten colors from rgb(51,102,153) to #336699, rgb(100%,0%,0%) to #ff0000 (sRGB color space)
         // Shorten colors from hsl(0, 100%, 50%) to #ff0000 (sRGB color space)
         // This makes it more likely that it'll get further compressed in the next step.
-        $css = preg_replace_callback('/rgb\s*\(\s*([0-9,\s\-\.\%]+)\s*\)(.{1})/i', array($this, 'rgb_to_hex'), $css);
-        $css = preg_replace_callback('/hsl\s*\(\s*([0-9,\s\-\.\%]+)\s*\)(.{1})/i', array($this, 'hsl_to_hex'), $css);
+        $css = preg_replace_callback('/rgb\s*\(\s*([0-9,\s\-\.\%]+)\s*\)(.{1})/i', [$this, 'rgb_to_hex'], $css);
+        $css = preg_replace_callback('/hsl\s*\(\s*([0-9,\s\-\.\%]+)\s*\)(.{1})/i', [$this, 'hsl_to_hex'], $css);
 
         // Shorten colors from #AABBCC to #ABC or short color name.
         $css = $this->compress_hex_colors($css);
@@ -501,7 +509,7 @@ class CssMinify
         $css = preg_replace('/' . self::NL . '/', "\n", $css);
 
         // Lowercase all uppercase properties
-        $css = preg_replace_callback('/(\{|\;)([A-Z\-]+)(\:)/', array($this, 'lowercase_properties'), $css);
+        $css = preg_replace_callback('/(\{|\;)([A-Z\-]+)(\:)/', [$this, 'lowercase_properties'], $css);
 
         // Some source control tools don't like it when files containing lines longer
         // than, say 8000 characters, are checked in. The linebreak option is used in
@@ -540,6 +548,7 @@ class CssMinify
      * e.g. background-color: #aabbccdd
      *
      * @param string $css
+     *
      * @return string
      */
     private function compress_hex_colors($css)
@@ -547,9 +556,9 @@ class CssMinify
         // Look for hex colors inside { ... } (to avoid IDs) and which don't have a =, or a " in front of them (to avoid filters)
         $pattern = '/(\=\s*?["\']?)?#([0-9a-f])([0-9a-f])([0-9a-f])([0-9a-f])([0-9a-f])([0-9a-f])(\}|[^0-9a-f{][^{]*?\})/iS';
         $_index = $index = $last_index = $offset = 0;
-        $sb = array();
+        $sb = [];
         // See: http://ajaxmin.codeplex.com/wikipage?title=CSS%20Colors
-        $short_safe = array(
+        $short_safe = [
             '#808080' => 'gray',
             '#008000' => 'green',
             '#800000' => 'maroon',
@@ -559,8 +568,8 @@ class CssMinify
             '#800080' => 'purple',
             '#c0c0c0' => 'silver',
             '#008080' => 'teal',
-            '#f00' => 'red'
-        );
+            '#f00' => 'red',
+        ];
 
         while (preg_match($pattern, $css, $m, 0, $offset)) {
             $index = $this->index_of($css, $m[0], $offset);
@@ -595,7 +604,8 @@ class CssMinify
     }
 
     /**
-     * Sets the memory limit for this script
+     * Sets the memory limit for this script.
+     *
      * @param int|string $limit
      */
     public function set_memory_limit($limit)
@@ -608,7 +618,8 @@ class CssMinify
      */
 
     /**
-     * Sets the maximum execution time for this script
+     * Sets the maximum execution time for this script.
+     *
      * @param int|string $seconds
      */
     public function set_max_execution_time($seconds)
@@ -617,7 +628,8 @@ class CssMinify
     }
 
     /**
-     * Sets the PCRE backtrack limit for this script
+     * Sets the PCRE backtrack limit for this script.
+     *
      * @param int|mixed $limit
      */
     public function set_pcre_backtrack_limit($limit)
@@ -626,7 +638,8 @@ class CssMinify
     }
 
     /**
-     * Sets the PCRE recursion limit for this script
+     * Sets the PCRE recursion limit for this script.
+     *
      * @param int|mixed $limit
      */
     public function set_pcre_recursion_limit($limit)
@@ -653,6 +666,7 @@ class CssMinify
         $match = preg_replace('/progid\:DXImageTransform\.Microsoft\.Alpha\(Opacity\=/i', 'alpha(opacity=', $match);
 
         $this->preserved_tokens[] = $match;
+
         return $quote . self::TOKEN . (count($this->preserved_tokens) - 1) . '___' . $quote;
     }
 
@@ -664,12 +678,14 @@ class CssMinify
     private function replace_calc($matches)
     {
         $this->preserved_tokens[] = trim(preg_replace('/\s*([\*\/\(\),])\s*/', '$1', $matches[2]));
+
         return 'calc(' . self::TOKEN . (count($this->preserved_tokens) - 1) . '___' . ')';
     }
 
     private function preserve_old_IE_specific_matrix_definition($matches)
     {
         $this->preserved_tokens[] = $matches[1];
+
         return 'filter:progid:DXImageTransform.Microsoft.Matrix(' . self::TOKEN . (count($this->preserved_tokens) - 1) . '___' . ')';
     }
 
@@ -700,7 +716,7 @@ class CssMinify
             $b = $this->round_number(255 * $this->hue_to_rgb($v1, $v2, $h - (1 / 3)));
         }
 
-        return $this->rgb_to_hex(array('', $r . ',' . $g . ',' . $b, $matches[2]));
+        return $this->rgb_to_hex(['', $r . ',' . $g . ',' . $b, $matches[2]]);
     }
 
     private function clamp_number($n, $min, $max)
@@ -725,6 +741,7 @@ class CssMinify
         if ($vh * 3 < 2) {
             return $v1 + ($v2 - $v1) * ((2 / 3) - $vh) * 6;
         }
+
         return $v1;
     }
 
@@ -743,7 +760,7 @@ class CssMinify
         // Values outside the sRGB color space should be clipped (0-255)
         for ($i = 0; $i < count($rgbcolors); $i++) {
             $rgbcolors[$i] = $this->clamp_number(intval($rgbcolors[$i], 10), 0, 255);
-            $rgbcolors[$i] = sprintf("%02x", $rgbcolors[$i]);
+            $rgbcolors[$i] = sprintf('%02x', $rgbcolors[$i]);
         }
 
         // Fix for issue #2528093

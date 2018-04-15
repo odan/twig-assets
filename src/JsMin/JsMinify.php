@@ -11,7 +11,8 @@ use Odan\JsMin\Exception\UnterminatedString;
  *
  * @copyright 2002 Douglas Crockford <douglas@crockford.com> (jsmin.c)
  * @copyright 2008 Ryan Grove <ryan@wonko.com> (PHP port)
- * @link      http://code.google.com/p/jsmin-php/
+ *
+ * @see      http://code.google.com/p/jsmin-php/
  */
 class JsMinify
 {
@@ -48,11 +49,12 @@ class JsMinify
     public static function minify($js)
     {
         $jsmin = new static($js);
+
         return $jsmin->min();
     }
 
     /**
-     * Perform minification, return result
+     * Perform minification, return result.
      *
      * @return string
      */
@@ -105,6 +107,7 @@ class JsMinify
         if ($mbIntEnc !== null) {
             mb_internal_encoding($mbIntEnc);
         }
+
         return $this->output;
     }
 
@@ -114,6 +117,7 @@ class JsMinify
      * ACTION_DELETE_A_B = Get the next B.
      *
      * @param int $command
+     *
      * @throws UnterminatedRegExp|UnterminatedString
      */
     protected function action($command)
@@ -148,7 +152,7 @@ class JsMinify
                         }
                         if (ord($this->a) <= self::ORD_LF) {
                             throw new UnterminatedString(
-                                "JSMin: Unterminated String at byte "
+                                'JSMin: Unterminated String at byte '
                                 . $this->inputIndex . ": {$str}"
                             );
                         }
@@ -180,7 +184,7 @@ class JsMinify
                             $pattern .= $this->a;
                         } elseif (ord($this->a) <= self::ORD_LF) {
                             throw new UnterminatedRegExp(
-                                "JSMin: Unterminated RegExp at byte "
+                                'JSMin: Unterminated RegExp at byte '
                                 . $this->inputIndex . ": {$pattern}"
                             );
                         }
@@ -205,7 +209,7 @@ class JsMinify
         if ($c === null) {
             if ($this->inputIndex < $this->inputLength) {
                 $c = $this->input[$this->inputIndex];
-                $this->inputIndex += 1;
+                $this->inputIndex++;
             } else {
                 return null;
             }
@@ -216,6 +220,7 @@ class JsMinify
         if (ord($c) < self::ORD_SPACE) { // control char
             return ' ';
         }
+
         return $c;
     }
 
@@ -249,6 +254,7 @@ class JsMinify
     protected function peek()
     {
         $this->lookAhead = $this->get();
+
         return $this->lookAhead;
     }
 
@@ -266,6 +272,7 @@ class JsMinify
                 if (preg_match('/^\\/@(?:cc_on|if|elif|else|end)\\b/', $comment)) {
                     return "/{$comment}";
                 }
+
                 return $get;
             }
         }
@@ -274,8 +281,9 @@ class JsMinify
     }
 
     /**
-     * @return string
      * @throws UnterminatedComment
+     *
+     * @return string
      */
     protected function multipleLineComment()
     {
@@ -294,11 +302,12 @@ class JsMinify
                     if (preg_match('/^@(?:cc_on|if|elif|else|end)\\b/', $comment)) {
                         return "/*{$comment}*/";
                     }
+
                     return ' ';
                 }
             } elseif ($get === null) {
                 throw new UnterminatedComment(
-                    "JSMin: Unterminated comment at byte "
+                    'JSMin: Unterminated comment at byte '
                     . $this->inputIndex . ": /*{$comment}"
                 );
             }
@@ -333,6 +342,7 @@ class JsMinify
                 }
             }
         }
+
         return false;
     }
 
@@ -345,6 +355,6 @@ class JsMinify
      */
     protected function isAlphaNum($c)
     {
-        return (preg_match('/^[0-9a-zA-Z_\\$\\\\]$/', $c) || ord($c) > 126);
+        return preg_match('/^[0-9a-zA-Z_\\$\\\\]$/', $c) || ord($c) > 126;
     }
 }

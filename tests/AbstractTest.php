@@ -11,7 +11,7 @@ use Twig_Environment;
 use Twig_Loader_Filesystem;
 
 /**
- * BaseTest
+ * BaseTest.
  */
 abstract class AbstractTest extends TestCase
 {
@@ -36,14 +36,14 @@ abstract class AbstractTest extends TestCase
     protected $root;
 
     /**
-     * <script src="/cache/file.96ce14164e1f92eb0ec93044a005be906f56d4.js"></script>
+     * <script src="/cache/file.96ce14164e1f92eb0ec93044a005be906f56d4.js"></script>.
      *
      * @var string
      */
     protected $scriptInlineRegex = '/^\<script src=\"cache\/file\.[a-zA-Z0-9]{36}/';
 
     /**
-     * <link rel="stylesheet" type="text/css" href="cache/file.c736045df3ebc9fc934d653ecb8738d0955d15.css" media="all" />
+     * <link rel="stylesheet" type="text/css" href="cache/file.c736045df3ebc9fc934d653ecb8738d0955d15.css" media="all" />.
      *
      * @var string
      */
@@ -55,7 +55,7 @@ abstract class AbstractTest extends TestCase
     protected $options = [];
 
     /**
-     * Set up
+     * Set up.
      */
     public function setUp()
     {
@@ -67,7 +67,7 @@ abstract class AbstractTest extends TestCase
             'cache_path' => vfsStream::url('root/tmp'),
             'cache_name' => 'assets-cache',
             'cache_lifetime' => 0,
-            'minify' => true
+            'minify' => true,
         ];
 
         $this->root = vfsStream::setup('root');
@@ -101,8 +101,9 @@ abstract class AbstractTest extends TestCase
     }
 
     /**
-     * @return TwigAssetsEngine
      * @throws \Exception
+     *
+     * @return TwigAssetsEngine
      */
     public function newTwigAssetsEngineInstance()
     {

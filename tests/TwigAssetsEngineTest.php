@@ -5,14 +5,12 @@ namespace Odan\Test;
 use Odan\Twig\TwigAssetsEngine;
 
 /**
- * AssetCacheTest
+ * AssetCacheTest.
  *
  * @coversDefaultClass \Odan\Twig\TwigAssetsEngine
  */
 class TwigAssetsEngineTest extends AbstractTest
 {
-
-
     /**
      * Test create object.
      *

@@ -7,15 +7,14 @@ use Twig_Extension;
 use Twig_SimpleFunction;
 
 /**
- * TwigAssetsExtension
+ * TwigAssetsExtension.
  */
 class TwigAssetsExtension extends Twig_Extension
 {
-
     /**
      * @var TwigAssetsEngine
      */
-    #private $env;
+    //private $env;
 
     private $engine = null;
 
@@ -39,12 +38,12 @@ class TwigAssetsExtension extends Twig_Extension
     {
         $function = new Twig_SimpleFunction('assets', [$this, 'assets'], [
             'needs_environment' => false,
-            'is_safe' => array('html')
+            'is_safe' => ['html'],
         ]);
 
         $function->setArguments([]);
 
-        return array($function);
+        return [$function];
     }
 
     /**

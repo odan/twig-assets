@@ -6,7 +6,7 @@ use Odan\Twig\AssetCache;
 use org\bovigo\vfs\vfsStream;
 
 /**
- * AssetCacheTest
+ * AssetCacheTest.
  *
  * @coversDefaultClass \Odan\Twig\AssetCache
  */
@@ -47,7 +47,7 @@ class AssetCacheTest extends AbstractTest
     }
 
     /**
-     * Test
+     * Test.
      *
      * @return void
      * @covers ::createCacheBustedUrl

@@ -28,14 +28,14 @@ class TwigAssetsEngine
     private $loader;
 
     /**
-     * Cache
+     * Cache.
      *
      * @var AbstractAdapter|ArrayAdapter
      */
     private $cache;
 
     /**
-     * Cache
+     * Cache.
      *
      * @var AssetCache AssetCache
      */
@@ -46,7 +46,7 @@ class TwigAssetsEngine
      *
      * @var array
      */
-    private $options = array(
+    private $options = [
         'cache_adapter' => null,
         'cache_name' => 'assets-cache',
         'cache_lifetime' => 0,
@@ -55,7 +55,7 @@ class TwigAssetsEngine
         'minify' => true,
         'inline' => false,
         'name' => 'file',
-    );
+    ];
 
     /**
      * Create new instance.
@@ -81,7 +81,7 @@ class TwigAssetsEngine
         $options = array_replace_recursive($this->options, $options);
 
         if (empty($options['path'])) {
-            throw new Exception("The option [path] is not defined");
+            throw new Exception('The option [path] is not defined');
         }
         $this->publicCache = new AssetCache($options['path']);
 
@@ -97,13 +97,14 @@ class TwigAssetsEngine
     }
 
     /**
-     * Render and compress JavaScript assets
+     * Render and compress JavaScript assets.
      *
      * @param array $assets
      * @param array $options
+     *
      * @return string content
      */
-    public function assets($assets, $options = array())
+    public function assets($assets, $options = [])
     {
         $assets = $this->prepareAssets($assets);
         $options = array_replace_recursive($this->options, $options);
@@ -118,10 +119,10 @@ class TwigAssetsEngine
         $cssFiles = [];
         foreach ($assets as $file) {
             $fileType = strtolower(pathinfo($file, PATHINFO_EXTENSION));
-            if ($fileType == "js") {
+            if ($fileType == 'js') {
                 $jsFiles[] = $file;
             }
-            if ($fileType == "css") {
+            if ($fileType == 'css') {
                 $cssFiles[] = $file;
             }
         }
@@ -139,21 +140,24 @@ class TwigAssetsEngine
      * Resolve real asset filenames.
      *
      * @param mixed $assets
+     *
      * @return array
      */
     private function prepareAssets($assets)
     {
-        $result = array();
+        $result = [];
         foreach ((array)$assets as $name) {
             $result[] = $this->getRealFilename($name);
         }
+
         return $result;
     }
 
     /**
-     * Returns full path and filename
+     * Returns full path and filename.
      *
      * @param string $file
+     *
      * @return string
      */
     private function getRealFilename($file)
@@ -170,6 +174,7 @@ class TwigAssetsEngine
      *
      * @param mixed $assets
      * @param mixed $settings
+     *
      * @return string
      */
     private function getCacheKey($assets, $settings = null)
@@ -179,14 +184,16 @@ class TwigAssetsEngine
             $keys[] = sha1_file($file);
         }
         $keys[] = sha1(serialize($settings));
+
         return sha1(implode('', $keys));
     }
 
     /**
-     * Render and compress CSS assets
+     * Render and compress CSS assets.
      *
      * @param array $assets
      * @param array $options
+     *
      * @return string content
      */
     public function css($assets, $options)
@@ -202,9 +209,9 @@ class TwigAssetsEngine
             $content = $this->getCssContent($asset, $options['minify']);
 
             if (!empty($options['inline'])) {
-                $contents[] = sprintf("<style>%s</style>", $content);
+                $contents[] = sprintf('<style>%s</style>', $content);
             } else {
-                $public .= $content . "";
+                $public .= $content . '';
             }
         }
         if (strlen($public) > 0) {
@@ -216,13 +223,15 @@ class TwigAssetsEngine
             $contents[] = sprintf('<link rel="stylesheet" type="text/css" href="%s" media="all" />', $url);
         }
         $result = implode("\n", $contents);
+
         return $result;
     }
 
     /**
-     * Check if url is valid
+     * Check if url is valid.
      *
      * @param string $url
+     *
      * @return bool
      */
     private function isExternalUrl($url)
@@ -235,6 +244,7 @@ class TwigAssetsEngine
      *
      * @param string $fileName Name of default CSS file
      * @param bool $minify Minify css if true
+     *
      * @return string CSS code
      */
     public function getCssContent($fileName, $minify)
@@ -244,14 +254,16 @@ class TwigAssetsEngine
             $compressor = new CssMinify();
             $content = $compressor->run($content);
         }
+
         return $content;
     }
 
     /**
-     * Render and compress CSS assets
+     * Render and compress CSS assets.
      *
      * @param array $assets
      * @param array $options
+     *
      * @return string content
      */
     public function js($assets, $options)
@@ -267,7 +279,7 @@ class TwigAssetsEngine
             $content = $this->getJsContent($asset, $options['minify']);
 
             if (!empty($options['inline'])) {
-                $contents[] = sprintf("<script>%s</script>", $content);
+                $contents[] = sprintf('<script>%s</script>', $content);
             } else {
                 $public .= sprintf("/* %s */\n", basename($asset)) . $content . "\n";
             }
@@ -281,6 +293,7 @@ class TwigAssetsEngine
             $contents[] = sprintf('<script src="%s"></script>', $url);
         }
         $result = implode("\n", $contents);
+
         return $result;
     }
 
@@ -298,6 +311,7 @@ class TwigAssetsEngine
         if ($minify) {
             $content = JsMinify::minify($content);
         }
+
         return $content;
     }
 }
