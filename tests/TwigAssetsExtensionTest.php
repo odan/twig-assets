@@ -27,7 +27,6 @@ class TwigAssetsExtensionTest extends AbstractTest
      * Test.
      *
      * @return void
-     * @covers ::getFunctions
      */
     public function testGetFunctions()
     {
@@ -39,7 +38,6 @@ class TwigAssetsExtensionTest extends AbstractTest
      * Test.
      *
      * @return void
-     * @covers ::assets
      */
     public function testJsInline()
     {
@@ -61,14 +59,6 @@ class TwigAssetsExtensionTest extends AbstractTest
      * Test.
      *
      * @return void
-     * @covers ::assets
-     * @covers \Odan\Twig\TwigAssetsEngine::assets
-     * @covers \Odan\Twig\TwigAssetsEngine::prepareAssets
-     * @covers \Odan\Twig\TwigAssetsEngine::js
-     * @covers \Odan\Twig\TwigAssetsEngine::getJsContent
-     * @covers \Odan\Twig\TwigAssetsEngine::getCacheKey
-     * @covers \Odan\Twig\TwigAssetsEngine::isExternalUrl
-     * @covers \Odan\Twig\TwigAssetsEngine::getRealFilename
      */
     public function testJsDefault()
     {
@@ -91,7 +81,6 @@ class TwigAssetsExtensionTest extends AbstractTest
      * Test.
      *
      * @return void
-     * @covers ::assets
      */
     public function testJsPublic()
     {
@@ -118,14 +107,6 @@ class TwigAssetsExtensionTest extends AbstractTest
      * Test.
      *
      * @return void
-     * @covers ::assets
-     * @covers \Odan\Twig\TwigAssetsEngine::assets
-     * @covers \Odan\Twig\TwigAssetsEngine::prepareAssets
-     * @covers \Odan\Twig\TwigAssetsEngine::css
-     * @covers \Odan\Twig\TwigAssetsEngine::getCssContent
-     * @covers \Odan\Twig\TwigAssetsEngine::getCacheKey
-     * @covers \Odan\Twig\TwigAssetsEngine::isExternalUrl
-     * @covers \Odan\Twig\TwigAssetsEngine::getRealFilename
      */
     public function testCssDefault()
     {

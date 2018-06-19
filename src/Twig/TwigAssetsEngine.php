@@ -5,10 +5,12 @@ namespace Odan\Twig;
 use Exception;
 use Odan\CssMin\CssMinify;
 use Odan\JsMin\JsMinify;
+use Psr\Cache\InvalidArgumentException;
 use Symfony\Component\Cache\Adapter\AbstractAdapter;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Twig_Environment;
+use Twig_Error_Loader;
 use Twig_Loader_Filesystem;
 use Twig_LoaderInterface;
 
@@ -103,8 +105,9 @@ class TwigAssetsEngine
      * @param array $options
      *
      * @return string content
+     * @throws InvalidArgumentException
      */
-    public function assets($assets, $options = [])
+    public function assets(array $assets, array $options = []): string
     {
         $assets = $this->prepareAssets($assets);
         $options = array_replace_recursive($this->options, $options);
@@ -159,8 +162,9 @@ class TwigAssetsEngine
      * @param string $file
      *
      * @return string
+     * @throws Twig_Error_Loader
      */
-    private function getRealFilename($file)
+    private function getRealFilename(string $file): string
     {
         if (strpos($file, 'vfs://') !== false) {
             return $file;
@@ -196,7 +200,7 @@ class TwigAssetsEngine
      *
      * @return string content
      */
-    public function css($assets, $options)
+    public function css(array $assets, array $options): string
     {
         $contents = [];
         $public = '';
@@ -234,7 +238,7 @@ class TwigAssetsEngine
      *
      * @return bool
      */
-    private function isExternalUrl($url)
+    private function isExternalUrl($url): bool
     {
         return (!filter_var($url, FILTER_VALIDATE_URL) === false) && (strpos($url, 'vfs://') === false);
     }
@@ -247,7 +251,7 @@ class TwigAssetsEngine
      *
      * @return string CSS code
      */
-    public function getCssContent($fileName, $minify)
+    public function getCssContent(string $fileName, bool $minify)
     {
         $content = file_get_contents($fileName);
         if ($minify) {
@@ -261,12 +265,12 @@ class TwigAssetsEngine
     /**
      * Render and compress CSS assets.
      *
-     * @param array $assets
-     * @param array $options
+     * @param array $assets Assets
+     * @param array $options Options
      *
      * @return string content
      */
-    public function js($assets, $options)
+    public function js(array $assets, array $options): string
     {
         $contents = [];
         $public = '';
@@ -305,7 +309,7 @@ class TwigAssetsEngine
      *
      * @return string JavaScript code
      */
-    private function getJsContent($file, $minify)
+    private function getJsContent(string $file, bool $minify)
     {
         $content = file_get_contents($file);
         if ($minify) {

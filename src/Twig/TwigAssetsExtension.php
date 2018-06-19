@@ -2,6 +2,7 @@
 
 namespace Odan\Twig;
 
+use Exception;
 use Twig_Environment;
 use Twig_Extension;
 use Twig_SimpleFunction;
@@ -14,8 +15,6 @@ class TwigAssetsExtension extends Twig_Extension
     /**
      * @var TwigAssetsEngine
      */
-    //private $env;
-
     private $engine = null;
 
     /**
@@ -23,6 +22,7 @@ class TwigAssetsExtension extends Twig_Extension
      *
      * @param Twig_Environment $env
      * @param array $options
+     * @throws Exception
      */
     public function __construct(Twig_Environment $env, array $options)
     {

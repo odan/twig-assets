@@ -2,6 +2,7 @@
 
 namespace Odan\Test;
 
+use Exception;
 use Odan\Twig\TwigAssetsEngine;
 
 /**
@@ -15,7 +16,7 @@ class TwigAssetsEngineTest extends AbstractTest
      * Test create object.
      *
      * @return void
-     * @covers ::__construct
+     * @throws Exception
      */
     public function testInstance()
     {
