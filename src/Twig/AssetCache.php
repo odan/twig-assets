@@ -55,7 +55,7 @@ class AssetCache
         $path = implode('/', $cacheDirs) . '/' . $name;
 
         // Create url
-        $cacheUrl = $path;
+        $cacheUrl = "/".$path;
 
         return $cacheUrl;
     }
