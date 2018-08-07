@@ -67,7 +67,7 @@ class AssetCacheTest extends AbstractTest
     {
         $cache = $this->newInstance();
         $actual = $cache->createCacheBustedUrl(vfsStream::url('root/public/cache/aa/file.js'), 'content');
-        $this->assertSame('cache/file.5654d9a3d587a044a6d9d9ba34003c65bd036d97.js', $actual);
+        $this->assertSame('/cache/file.5654d9a3d587a044a6d9d9ba34003c65bd036d97.js', $actual);
     }
 
 
@@ -80,6 +80,6 @@ class AssetCacheTest extends AbstractTest
     {
         $cache = $this->newInstance();
         $actual = $cache->createCacheBustedUrl(vfsStream::url('root/public/cache/ad/file.js'), 'content');
-        $this->assertSame('cache/file.52f659a1fc90ca55c1d3f1ab8d2c4c2d573b676f.js', $actual);
+        $this->assertSame('/cache/file.52f659a1fc90ca55c1d3f1ab8d2c4c2d573b676f.js', $actual);
     }
 }
