@@ -7,7 +7,7 @@ Caching and compression for Twig assets (JavaScript and CSS).
 [![Build Status](https://travis-ci.org/odan/twig-assets.svg?branch=master)](https://travis-ci.org/odan/twig-assets)
 [![Code Coverage](https://scrutinizer-ci.com/g/odan/twig-assets/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/odan/twig-assets/code-structure)
 [![Quality Score](https://scrutinizer-ci.com/g/odan/twig-assets/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/odan/twig-assets/?branch=master)
-[![Total Downloads](https://img.shields.io/packagist/dt/odan/twig-assets.svg)](https://packagist.org/packages/odan/twig-assets)
+[![Total Downloads](https://img.shields.io/packagist/dt/odan/twig-assets.svg)](https://packagist.org/packages/odan/twig-assets/stats)
 
 
 ## Installation
