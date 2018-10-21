@@ -2,36 +2,11 @@
 
 namespace Odan\Twig;
 
-use RuntimeException;
-
 /**
  * Asset Cache for public JS ans CSS files.
  */
-class AssetCache
+class PublicAssetsCache extends TwigAssetsCache
 {
-    /**
-     * Cache.
-     *
-     * @var string Path
-     */
-    protected $publicDir;
-
-    /**
-     * Create new instance.
-     *
-     * @param string $publicDir
-     *
-     * @throws RuntimeException
-     */
-    public function __construct(string $publicDir)
-    {
-        $this->publicDir = $publicDir;
-
-        if (!file_exists($this->publicDir)) {
-            throw new RuntimeException("Path {$this->publicDir} not found");
-        }
-    }
-
     /**
      * Returns url for filename.
      *
@@ -77,7 +52,7 @@ class AssetCache
 
         $name = pathinfo($fileName, PATHINFO_FILENAME);
         $checksum = sha1($fileName . $content);
-        $cacheFile = $this->publicDir . '/' . $name . '.' . $checksum . '.' . $extension;
+        $cacheFile = $this->directory . '/' . $name . '.' . $checksum . '.' . $extension;
 
         file_put_contents($cacheFile, $content);
         chmod($cacheFile, 0775);

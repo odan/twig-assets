@@ -39,7 +39,7 @@ class TwigAssetsEngine
     /**
      * Cache.
      *
-     * @var AssetCache AssetCache
+     * @var PublicAssetsCache AssetCache
      */
     private $publicCache;
 
@@ -85,7 +85,7 @@ class TwigAssetsEngine
         if (empty($options['path'])) {
             throw new Exception('The option [path] is not defined');
         }
-        $this->publicCache = new AssetCache($options['path']);
+        $this->publicCache = new PublicAssetsCache($options['path']);
 
         if (!empty($options['cache_path'])) {
             $this->cache = new FilesystemAdapter($options['cache_name'], $options['cache_lifetime'], $options['cache_path']);

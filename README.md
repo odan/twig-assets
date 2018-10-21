@@ -163,3 +163,35 @@ Content of `home.twig`:
     <div id="content" class="container"></div>
 {% endblock %}
 ```
+
+## Clearing the cache
+
+### Clearing the internal chache
+
+```php
+
+use Odan\Twig;
+
+$settings = $container->get('settings');
+
+// Internal twig cache path e.g. tmp/twig-cache
+$twigCachePath = $settings['twig']['cache_path']; 
+
+$internalCache = new TwigAssetsCache($twigCachePath);
+$internalCache->clearCache();
+```
+
+### Clearing the public chache
+
+```php
+
+use Odan\Twig;
+
+$settings = $container->get('settings');
+
+// Public assets cache directory e.g. 'public/cache' or 'public/assets'
+$publicAssetsCachePath = $settings['assets']['path'];
+
+$internalCache = new TwigAssetsCache($publicAssetsCachePath);
+$internalCache->clearCache();
+```
