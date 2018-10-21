@@ -2,6 +2,8 @@
 
 namespace Odan\Twig;
 
+use DirectoryIterator;
+use FilesystemIterator;
 use RuntimeException;
 use SplFileInfo;
 
