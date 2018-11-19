@@ -22,6 +22,10 @@ composer install odan/twig-assets
 $options = [
     // Public assets cache directory
     'path' => '/var/www/example.com/htdocs/public/cache',
+    // Public cache directory permissions (octal)
+    // You need to prefix mode with a zero (0)
+    // Use -1 to disable chmod
+    'path_chmod' => 0750,
     // Cache settings
     'cache_enabled' => true,
     'cache_path' => '/var/www/example.com/htdocs/temp',

@@ -55,7 +55,10 @@ class PublicAssetsCache extends TwigAssetsCache
         $cacheFile = $this->directory . '/' . $name . '.' . $checksum . '.' . $extension;
 
         file_put_contents($cacheFile, $content);
-        chmod($cacheFile, 0775);
+
+        if ($this->chmod > -1) {
+            chmod($cacheFile, $this->chmod);
+        }
 
         return $cacheFile;
     }

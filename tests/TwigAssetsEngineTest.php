@@ -15,8 +15,9 @@ class TwigAssetsEngineTest extends AbstractTest
     /**
      * Test create object.
      *
-     * @return void
      * @throws Exception
+     *
+     * @return void
      */
     public function testInstance()
     {

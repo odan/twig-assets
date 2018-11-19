@@ -22,6 +22,7 @@ class TwigAssetsExtension extends Twig_Extension
      *
      * @param Twig_Environment $env
      * @param array $options
+     *
      * @throws Exception
      */
     public function __construct(Twig_Environment $env, array $options)

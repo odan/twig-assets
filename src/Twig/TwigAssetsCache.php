@@ -20,15 +20,20 @@ class TwigAssetsCache
     protected $directory;
 
     /**
+     * @var int File mode
+     */
+    protected $chmod = -1;
+
+    /**
      * Create new instance.
      *
-     * @param string $publicDir
-     *
-     * @throws RuntimeException
+     * @param string $publicDir Public directory
+     * @param int $chmod Changes file mode (optional)
      */
-    public function __construct(string $publicDir)
+    public function __construct(string $publicDir, int $chmod = -1)
     {
         $this->directory = $publicDir;
+        $this->chmod = $chmod;
 
         if (!file_exists($this->directory)) {
             throw new RuntimeException("Path {$this->directory} not found");
@@ -50,9 +55,10 @@ class TwigAssetsCache
      * This function is compatible with vfsStream.
      *
      * @param string $path Path
-     * @return bool True on success or false on failure.
+     *
+     * @return bool true on success or false on failure
      */
-    private function removeDirectory($path): bool
+    private function removeDirectory(string $path): bool
     {
         $iterator = new DirectoryIterator($path);
         foreach ($iterator as $fileInfo) {

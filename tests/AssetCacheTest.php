@@ -2,7 +2,6 @@
 
 namespace Odan\Test;
 
-use Exception;
 use Odan\Twig\PublicAssetsCache;
 use org\bovigo\vfs\vfsStream;
 
@@ -20,7 +19,7 @@ class AssetCacheTest extends AbstractTest
      */
     public function newInstance()
     {
-        return new PublicAssetsCache(vfsStream::url('root/public/cache'));
+        return new PublicAssetsCache(vfsStream::url('root/public/cache'), 0750);
     }
 
     /**
@@ -37,7 +36,7 @@ class AssetCacheTest extends AbstractTest
      * Test create object.
      *
      * @return void
-     * @expectedException Exception
+     * @expectedException \Exception
      */
     public function testInstanceError()
     {
@@ -57,7 +56,6 @@ class AssetCacheTest extends AbstractTest
         $this->assertRegExp($this->cacheBustedRegex, $actual);
     }
 
-
     /**
      * Test.
      *
@@ -69,7 +67,6 @@ class AssetCacheTest extends AbstractTest
         $actual = $cache->createCacheBustedUrl(vfsStream::url('root/public/cache/aa/file.js'), 'content');
         $this->assertSame('cache/file.5654d9a3d587a044a6d9d9ba34003c65bd036d97.js', $actual);
     }
-
 
     /**
      * Test.

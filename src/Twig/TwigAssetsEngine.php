@@ -54,6 +54,7 @@ class TwigAssetsEngine
         'cache_lifetime' => 0,
         'cache_path' => null,
         'path' => null,
+        'path_chmod' => 0750,
         'minify' => true,
         'inline' => false,
         'name' => 'file',
@@ -85,7 +86,13 @@ class TwigAssetsEngine
         if (empty($options['path'])) {
             throw new Exception('The option [path] is not defined');
         }
-        $this->publicCache = new PublicAssetsCache($options['path']);
+
+        $chmod = -1;
+        if (isset($options['path_chmod']) && $options['path_chmod'] > -1) {
+            $chmod = (int)$options['path_chmod'];
+        }
+
+        $this->publicCache = new PublicAssetsCache($options['path'], $chmod);
 
         if (!empty($options['cache_path'])) {
             $this->cache = new FilesystemAdapter($options['cache_name'], $options['cache_lifetime'], $options['cache_path']);
@@ -104,8 +111,9 @@ class TwigAssetsEngine
      * @param array $assets
      * @param array $options
      *
-     * @return string content
      * @throws InvalidArgumentException
+     *
+     * @return string content
      */
     public function assets(array $assets, array $options = []): string
     {
@@ -161,8 +169,9 @@ class TwigAssetsEngine
      *
      * @param string $file
      *
-     * @return string
      * @throws Twig_Error_Loader
+     *
+     * @return string
      */
     private function getRealFilename(string $file): string
     {
