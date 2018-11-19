@@ -170,10 +170,9 @@ Content of `home.twig`:
 
 ## Clearing the cache
 
-### Clearing the internal chache
+### Clearing the internal cache
 
 ```php
-
 use Odan\Twig;
 
 $settings = $container->get('settings');
@@ -185,10 +184,9 @@ $internalCache = new TwigAssetsCache($twigCachePath);
 $internalCache->clearCache();
 ```
 
-### Clearing the public chache
+### Clearing the public cache
 
 ```php
-
 use Odan\Twig;
 
 $settings = $container->get('settings');
