@@ -27,11 +27,12 @@ $options = [
     // Use -1 to disable chmod
     'path_chmod' => 0750,
     // Cache settings
-    'cache_enabled' => true,
+    // To disable the internal cache, set cache_path to '' (empty string)
     'cache_path' => '/var/www/example.com/htdocs/temp',
     'cache_name' => 'assets-cache',
     'cache_lifetime' => 0,
     // Enable JavaScript and CSS compression
+    // 1 = on, 0 = off
     'minify' => 1
 ];
 ```
