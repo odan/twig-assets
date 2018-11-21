@@ -169,6 +169,23 @@ Content of `home.twig`:
 {% endblock %}
 ```
 
+## Configure a base path
+
+You should inform the browser where to find the web assets with a `base href` in your layout template. 
+
+### Slim Twig example:
+
+```twig
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <!-- other stuff -->
+    <base href="{{ base_url() }}/"/>
+    <!-- other stuff -->
+```
+[Full example](https://github.com/odan/prisma/blob/master/templates/Layout/layout.twig#L10)
+
 ## Clearing the cache
 
 ### Clearing the internal cache
