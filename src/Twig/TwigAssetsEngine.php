@@ -58,7 +58,7 @@ class TwigAssetsEngine
         'minify' => true,
         'inline' => false,
         'name' => 'file',
-        'base_path' => null,
+        'url_base_path' => null,
     ];
 
     /**
@@ -71,7 +71,7 @@ class TwigAssetsEngine
      * - cache_lifetime: Default is 0
      * - cache_path: The temporary cache path
      * - path: The public assets cache directory (e.g. public/cache)
-     * - base_path: The absolute path of the minified css/js.
+     * - url_base_path: The path of the minified css/js.
      * - minify: Enable JavaScript and CSS compression. The default value is true
      * - inline: Default is false
      * - name: The default asset name. The default value is 'file'
@@ -234,10 +234,10 @@ class TwigAssetsEngine
             if (empty(pathinfo($name, PATHINFO_EXTENSION))) {
                 $name .= '.css';
             }
-            if (empty($options["base_path"])) {
+            if (empty($options["url_base_path"])) {
 	            $url = $this->publicCache->createCacheBustedUrl( $name, $public );
             } else {
-	            $url = $this->publicCache->createCacheUrlWithBasePath( $name, $public, $options["base_path"]);
+	            $url = $this->publicCache->createCacheUrlWithBasePath( $name, $public, $options["url_base_path"]);
             }
             $contents[] = sprintf('<link rel="stylesheet" type="text/css" href="%s" media="all" />', $url);
         }
@@ -308,10 +308,10 @@ class TwigAssetsEngine
             if (empty(pathinfo($name, PATHINFO_EXTENSION))) {
                 $name .= '.js';
             }
-	        if (empty($options["base_path"])) {
+	        if (empty($options["url_base_path"])) {
 		        $url = $this->publicCache->createCacheBustedUrl($name, $public);
 	        } else {
-		        $url = $this->publicCache->createCacheUrlWithBasePath( $name, $public, $options["base_path"]);
+		        $url = $this->publicCache->createCacheUrlWithBasePath( $name, $public, $options["url_base_path"]);
 	        }
             $contents[] = sprintf('<script src="%s"></script>', $url);
         }

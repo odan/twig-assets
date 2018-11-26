@@ -36,7 +36,7 @@ class PublicAssetsCache extends TwigAssetsCache
     }
 
 	/**
-	 * Return the filename with the absolute base_path
+	 * Return the filename with the absolute basePath
 	 *
 	 * @param string $fileName
 	 * @param string $content
