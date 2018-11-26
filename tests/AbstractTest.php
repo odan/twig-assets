@@ -62,7 +62,7 @@ abstract class AbstractTest extends TestCase
         $this->options = [
             // Public assets cache directory
             'path' => vfsStream::url('root/public/cache'),
-            // The public url pase path
+            // The public url base path
             'url_base_path' => '',
             // Cache settings
             'cache_enabled' => true,
