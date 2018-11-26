@@ -40,14 +40,14 @@ abstract class AbstractTest extends TestCase
      *
      * @var string
      */
-    protected $scriptInlineRegex = '/^\<script src=\"cache\/file\.[a-zA-Z0-9]{36}/';
+    protected $scriptInlineFileRegex = '/^\<script src=\"file\.[a-zA-Z0-9]{36}/';
 
     /**
-     * <link rel="stylesheet" type="text/css" href="cache/file.c736045df3ebc9fc934d653ecb8738d0955d15.css" media="all" />.
+     * <link rel="stylesheet" type="text/css" href="file.c736045df3ebc9fc934d653ecb8738d0955d15.css" media="all" />.
      *
      * @var string
      */
-    protected $styleInlineRegex = '/^\<link rel=\"stylesheet\" type=\"text\/css\" href=\"cache\/file\.[a-zA-Z0-9]{36}/';
+    protected $styleInlineFileRegex = '/^\<link rel=\"stylesheet\" type=\"text\/css\" href=\"file\.[a-zA-Z0-9]{36}/';
 
     /**
      * @var array
@@ -62,6 +62,8 @@ abstract class AbstractTest extends TestCase
         $this->options = [
             // Public assets cache directory
             'path' => vfsStream::url('root/public/cache'),
+            // The public url pase path
+            'url_base_path' => '',
             // Cache settings
             'cache_enabled' => true,
             'cache_path' => vfsStream::url('root/tmp'),

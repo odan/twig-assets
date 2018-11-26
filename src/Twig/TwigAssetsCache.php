@@ -43,7 +43,7 @@ class TwigAssetsCache
     /**
      * Clear the existing cache.
      *
-     * @return bool
+     * @return bool Success
      */
     public function clearCache(): bool
     {

@@ -65,16 +65,16 @@ class TwigAssetsExtensionTest extends AbstractTest
         $file = vfsStream::newFile('test.js')->at($this->root)->setContent('alert(2);');
         $filename = $file->url();
         $actual = $this->extension->assets(['files' => [$filename], 'inline' => false]);
-        $this->assertRegExp($this->scriptInlineRegex, $actual);
+        $this->assertRegExp($this->scriptInlineFileRegex, $actual);
 
         // get from cache
         $actual2 = $this->extension->assets(['files' => [$filename], 'inline' => false]);
-        $this->assertRegExp($this->scriptInlineRegex, $actual2);
+        $this->assertRegExp($this->scriptInlineFileRegex, $actual2);
 
         // update js file, cache must be rebuild
         file_put_contents($filename, 'alert(4);');
         $actual3 = $this->extension->assets(['files' => [$filename], 'inline' => false]);
-        $this->assertRegExp($this->scriptInlineRegex, $actual3);
+        $this->assertRegExp($this->scriptInlineFileRegex, $actual3);
     }
 
     /**
@@ -90,16 +90,16 @@ class TwigAssetsExtensionTest extends AbstractTest
 
         // Generate
         $actual = $this->extension->assets(['files' => [$filename], 'inline' => false]);
-        $this->assertRegExp($this->scriptInlineRegex, $actual);
+        $this->assertRegExp($this->scriptInlineFileRegex, $actual);
 
         // Get from cache
         $actual2 = $this->extension->assets(['files' => [$filename], 'inline' => false]);
-        $this->assertRegExp($this->scriptInlineRegex, $actual2);
+        $this->assertRegExp($this->scriptInlineFileRegex, $actual2);
 
         // Update js file, cache must be rebuild
         file_put_contents($realFileUrl, 'alert(4);');
         $actual3 = $this->extension->assets(['files' => [$filename], 'inline' => false]);
-        $this->assertRegExp($this->scriptInlineRegex, $actual3);
+        $this->assertRegExp($this->scriptInlineFileRegex, $actual3);
         $this->assertNotSame($actual2, $actual3);
     }
 
@@ -121,15 +121,15 @@ class TwigAssetsExtensionTest extends AbstractTest
         $file = vfsStream::newFile('test.css')->at($this->root)->setContent($content);
         $filename = $file->url();
         $actual = $this->extension->assets(['files' => [$filename], 'inline' => false]);
-        $this->assertRegExp($this->styleInlineRegex, $actual);
+        $this->assertRegExp($this->styleInlineFileRegex, $actual);
 
         // get from cache
         $actual2 = $this->extension->assets(['files' => [$filename], 'inline' => false]);
-        $this->assertRegExp($this->styleInlineRegex, $actual2);
+        $this->assertRegExp($this->styleInlineFileRegex, $actual2);
 
         // update js file, cache must be rebuild
         file_put_contents($filename, 'alert(4);');
         $actual3 = $this->extension->assets(['files' => [$filename], 'inline' => false]);
-        $this->assertRegExp($this->styleInlineRegex, $actual3);
+        $this->assertRegExp($this->styleInlineFileRegex, $actual3);
     }
 }

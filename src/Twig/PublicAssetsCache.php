@@ -10,52 +10,26 @@ class PublicAssetsCache extends TwigAssetsCache
     /**
      * Returns url for filename.
      *
-     * @param string $fileName
-     * @param string $content
+     * @param string $fileName The filename
+     * @param string $content The content
+     * @param string $urlBasePath The url base path
      *
-     * @return string
+     * @return string The url
      */
-    public function createCacheBustedUrl(string $fileName, string $content)
+    public function createCacheBustedUrl(string $fileName, string $content, string $urlBasePath): string
     {
-        // For url we need to cache it
         $cacheFile = $this->createPublicCacheFile($fileName, $content);
-        $name = pathinfo($cacheFile, PATHINFO_BASENAME);
-        $dir = pathinfo($cacheFile, PATHINFO_DIRNAME);
-        $dirs = explode('/', $dir);
 
-        // Folder: cache/
-        $cacheDirs = array_slice($dirs, count($dirs) - 1);
-
-        // Folder: cache/filename.ext
-        $path = implode('/', $cacheDirs) . '/' . $name;
-
-        // Create url
-        $cacheUrl = $path;
-
-        return $cacheUrl;
-    }
-
-	/**
-	 * Return the filename with the absolute basePath
-	 *
-	 * @param string $fileName
-	 * @param string $content
-	 * @param string $basePath
-	 *
-	 * @return string
-	 */
-    public function createCacheUrlWithBasePath(string $fileName, string $content, string $basePath) {
-	    $cacheFile = $this->createPublicCacheFile($fileName, $content);
-	    return $basePath."/".pathinfo($cacheFile, PATHINFO_BASENAME);
+        return $urlBasePath . pathinfo($cacheFile, PATHINFO_BASENAME);
     }
 
     /**
      * Create cache file from fileName.
      *
-     * @param string $fileName
-     * @param string $content
+     * @param string $fileName The filename
+     * @param string $content The content
      *
-     * @return string cacheFile
+     * @return string The cache filename
      */
     private function createPublicCacheFile(string $fileName, string $content): string
     {

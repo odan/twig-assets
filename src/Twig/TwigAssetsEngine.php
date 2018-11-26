@@ -230,15 +230,15 @@ class TwigAssetsEngine
             }
         }
         if (strlen($public) > 0) {
-            $name = isset($options['name']) ? $options['name'] : 'file.css';
+            $name = $options['name'] ?? 'file.css';
+
             if (empty(pathinfo($name, PATHINFO_EXTENSION))) {
                 $name .= '.css';
             }
-            if (empty($options["url_base_path"])) {
-	            $url = $this->publicCache->createCacheBustedUrl( $name, $public );
-            } else {
-	            $url = $this->publicCache->createCacheUrlWithBasePath( $name, $public, $options["url_base_path"]);
-            }
+
+            $urlBasePath = $options['url_base_path'] ?? '';
+            $url = $this->publicCache->createCacheBustedUrl($name, $public, $urlBasePath);
+
             $contents[] = sprintf('<link rel="stylesheet" type="text/css" href="%s" media="all" />', $url);
         }
         $result = implode("\n", $contents);
@@ -304,15 +304,15 @@ class TwigAssetsEngine
             }
         }
         if (strlen($public) > 0) {
-            $name = isset($options['name']) ? $options['name'] : 'file.js';
+            $name = $options['name'] ?? 'file.js';
+
             if (empty(pathinfo($name, PATHINFO_EXTENSION))) {
                 $name .= '.js';
             }
-	        if (empty($options["url_base_path"])) {
-		        $url = $this->publicCache->createCacheBustedUrl($name, $public);
-	        } else {
-		        $url = $this->publicCache->createCacheUrlWithBasePath( $name, $public, $options["url_base_path"]);
-	        }
+
+            $urlBasePath = $options['url_base_path'] ?? '';
+            $url = $this->publicCache->createCacheBustedUrl($name, $public, $urlBasePath);
+
             $contents[] = sprintf('<script src="%s"></script>', $url);
         }
         $result = implode("\n", $contents);
