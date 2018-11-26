@@ -58,7 +58,7 @@ class TwigAssetsEngine
         'minify' => true,
         'inline' => false,
         'name' => 'file',
-	    'base_path' => null
+        'base_path' => null,
     ];
 
     /**
