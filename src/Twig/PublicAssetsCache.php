@@ -35,6 +35,20 @@ class PublicAssetsCache extends TwigAssetsCache
         return $cacheUrl;
     }
 
+	/**
+	 * Return the filename with the absolute basePath
+	 *
+	 * @param string $fileName
+	 * @param string $content
+	 * @param string $basePath
+	 *
+	 * @return string
+	 */
+    public function createCacheUrlWithBasePath(string $fileName, string $content, string $basePath) {
+	    $cacheFile = $this->createPublicCacheFile($fileName, $content);
+	    return $basePath."/".pathinfo($cacheFile, PATHINFO_BASENAME);
+    }
+
     /**
      * Create cache file from fileName.
      *

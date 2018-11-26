@@ -58,6 +58,7 @@ class TwigAssetsEngine
         'minify' => true,
         'inline' => false,
         'name' => 'file',
+        'url_base_path' => null,
     ];
 
     /**
@@ -70,6 +71,7 @@ class TwigAssetsEngine
      * - cache_lifetime: Default is 0
      * - cache_path: The temporary cache path
      * - path: The public assets cache directory (e.g. public/cache)
+     * - url_base_path: The path of the minified css/js.
      * - minify: Enable JavaScript and CSS compression. The default value is true
      * - inline: Default is false
      * - name: The default asset name. The default value is 'file'
@@ -232,7 +234,11 @@ class TwigAssetsEngine
             if (empty(pathinfo($name, PATHINFO_EXTENSION))) {
                 $name .= '.css';
             }
-            $url = $this->publicCache->createCacheBustedUrl($name, $public);
+            if (empty($options["url_base_path"])) {
+	            $url = $this->publicCache->createCacheBustedUrl( $name, $public );
+            } else {
+	            $url = $this->publicCache->createCacheUrlWithBasePath( $name, $public, $options["url_base_path"]);
+            }
             $contents[] = sprintf('<link rel="stylesheet" type="text/css" href="%s" media="all" />', $url);
         }
         $result = implode("\n", $contents);
@@ -302,7 +308,11 @@ class TwigAssetsEngine
             if (empty(pathinfo($name, PATHINFO_EXTENSION))) {
                 $name .= '.js';
             }
-            $url = $this->publicCache->createCacheBustedUrl($name, $public);
+	        if (empty($options["url_base_path"])) {
+		        $url = $this->publicCache->createCacheBustedUrl($name, $public);
+	        } else {
+		        $url = $this->publicCache->createCacheUrlWithBasePath( $name, $public, $options["url_base_path"]);
+	        }
             $contents[] = sprintf('<script src="%s"></script>', $url);
         }
         $result = implode("\n", $contents);
