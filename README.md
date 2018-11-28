@@ -122,7 +122,7 @@ name | string | file | no | Defines the output file name within the URL.
 Output cached and minified CSS content inline:
 
 ```twig
-{{ assets({files: ['Login/login.css'], inline: true}) }}
+{% raw %}{{ assets({files: ['Login/login.css'], inline: true}) }}{% endraw %}
 ```
 
 Output multiple CSS assests into a single .css file:
