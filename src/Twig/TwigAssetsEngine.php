@@ -10,7 +10,7 @@ use InvalidArgumentException;
 use Symfony\Component\Cache\Adapter\AbstractAdapter;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
-use Twig\Environment as  TwigEnvironment;
+use Twig\Environment as TwigEnvironment;
 use Twig\Error\LoaderError as TwigErrorLoader;
 use Twig\Loader\LoaderInterface;
 
