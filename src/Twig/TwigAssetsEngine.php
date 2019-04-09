@@ -3,16 +3,16 @@
 namespace Odan\Twig;
 
 use Exception;
-use Odan\CssMin\CssMinify;
-use Odan\JsMin\JsMinify;
-use Psr\Cache\InvalidArgumentException;
+use RuntimeException;
+use tubalmartin\CssMin\Minifier as CssMinifier;
+use JSMin\JSMin;
+use InvalidArgumentException;
 use Symfony\Component\Cache\Adapter\AbstractAdapter;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
-use Twig_Environment;
-use Twig_Error_Loader;
-use Twig_Loader_Filesystem;
-use Twig_LoaderInterface;
+use Twig\Environment as  TwigEnvironment;
+use Twig\Error\LoaderError as TwigErrorLoader;
+use Twig\Loader\LoaderInterface;
 
 /**
  * Extension that adds the ability to cache and minify assets.
@@ -20,12 +20,7 @@ use Twig_LoaderInterface;
 class TwigAssetsEngine
 {
     /**
-     * @var Twig_Environment
-     */
-    private $env;
-
-    /**
-     * @var Twig_Loader_Filesystem|Twig_LoaderInterface
+     * @var LoaderInterface
      */
     private $loader;
 
@@ -64,7 +59,7 @@ class TwigAssetsEngine
     /**
      * Create new instance.
      *
-     * @param Twig_Environment $env
+     * @param TwigEnvironment $env
      * @param array $options
      * - cache_adapter: The assets cache adapter. false or AbstractAdapter
      * - cache_name: Default is 'assets-cache'
@@ -78,15 +73,14 @@ class TwigAssetsEngine
      *
      * @throws Exception
      */
-    public function __construct(Twig_Environment $env, array $options)
+    public function __construct(TwigEnvironment $env, array $options)
     {
-        $this->env = $env;
         $this->loader = $env->getLoader();
 
         $options = array_replace_recursive($this->options, $options);
 
         if (empty($options['path'])) {
-            throw new Exception('The option [path] is not defined');
+            throw new InvalidArgumentException('The option [path] is not defined');
         }
 
         $chmod = -1;
@@ -152,11 +146,11 @@ class TwigAssetsEngine
     /**
      * Resolve real asset filenames.
      *
-     * @param mixed $assets
+     * @param array|mixed $assets
      *
-     * @return array
+     * @return array assets
      */
-    private function prepareAssets($assets)
+    private function prepareAssets($assets): array
     {
         $result = [];
         foreach ((array)$assets as $name) {
@@ -171,7 +165,7 @@ class TwigAssetsEngine
      *
      * @param string $file
      *
-     * @throws Twig_Error_Loader
+     * @throws TwigErrorLoader
      *
      * @return string
      */
@@ -187,12 +181,12 @@ class TwigAssetsEngine
     /**
      * Get cache key.
      *
-     * @param mixed $assets
-     * @param mixed $settings
+     * @param array|mixed $assets
+     * @param array|mixed|null $settings
      *
      * @return string
      */
-    private function getCacheKey($assets, $settings = null)
+    private function getCacheKey($assets, $settings = null): string
     {
         $keys = [];
         foreach ((array)$assets as $file) {
@@ -229,7 +223,7 @@ class TwigAssetsEngine
                 $public .= $content . '';
             }
         }
-        if (strlen($public) > 0) {
+        if ($public !== '') {
             $name = $options['name'] ?? 'file.css';
 
             if (empty(pathinfo($name, PATHINFO_EXTENSION))) {
@@ -266,11 +260,16 @@ class TwigAssetsEngine
      *
      * @return string CSS code
      */
-    public function getCssContent(string $fileName, bool $minify)
+    public function getCssContent(string $fileName, bool $minify): string
     {
         $content = file_get_contents($fileName);
+
+        if ($content === false) {
+            throw new RuntimeException(sprintf('File could could not be read %s', $fileName));
+        }
+
         if ($minify) {
-            $compressor = new CssMinify();
+            $compressor = new CssMinifier();
             $content = $compressor->run($content);
         }
 
@@ -289,6 +288,7 @@ class TwigAssetsEngine
     {
         $contents = [];
         $public = '';
+
         foreach ($assets as $asset) {
             if ($this->isExternalUrl($asset)) {
                 // External url
@@ -303,7 +303,7 @@ class TwigAssetsEngine
                 $public .= sprintf("/* %s */\n", basename($asset)) . $content . "\n";
             }
         }
-        if (strlen($public) > 0) {
+        if ($public !== '') {
             $name = $options['name'] ?? 'file.js';
 
             if (empty(pathinfo($name, PATHINFO_EXTENSION))) {
@@ -315,9 +315,8 @@ class TwigAssetsEngine
 
             $contents[] = sprintf('<script src="%s"></script>', $url);
         }
-        $result = implode("\n", $contents);
 
-        return $result;
+        return implode("\n", $contents);
     }
 
     /**
@@ -328,11 +327,16 @@ class TwigAssetsEngine
      *
      * @return string JavaScript code
      */
-    private function getJsContent(string $file, bool $minify)
+    private function getJsContent(string $file, bool $minify): string
     {
         $content = file_get_contents($file);
+
+        if ($content === false) {
+            throw new RuntimeException(sprintf('File could could not be read %s', $file));
+        }
+
         if ($minify) {
-            $content = JsMinify::minify($content);
+            $content = JSMin::minify($content);
         }
 
         return $content;

@@ -21,11 +21,13 @@
   "require": {
     "php": "^7.0",
     "twig/extensions": "^1.5",
-    "symfony/cache": "^3.2|4.0"
+    "symfony/cache": "^3.2|4.0",
+    "tubalmartin/cssmin": "^4.1",
+    "mrclay/jsmin-php": "^2.4"
   },
   "require-dev": {
-    "phpunit/phpunit": "^6.0",
-    "mikey179/vfsStream": "^1.6"
+    "phpunit/phpunit": "^7.0",
+    "mikey179/vfsstream": "^1.6"
   },
   "scripts": {
     "test": "phpunit",

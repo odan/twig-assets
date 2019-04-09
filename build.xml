@@ -50,7 +50,7 @@
             <arg value="${basedir}/build/phpstan.phar"/>
             <arg value="analyse"/>
             <arg value="-l"/>
-            <arg value="5"/>
+            <arg value="max"/>
             <arg value="-c"/>
             <arg path="${basedir}/phpstan.neon"/>
             <arg value="src"/>
