@@ -56,8 +56,8 @@ $options = [
 ### Register the Twig Extension
 
 ```php
-$loader = new Twig_Loader_Filesystem('/path/to/templates');
-$twig = new Twig_Environment($loader, array(
+$loader = new \Twig\Loader\FilesystemLoader('/path/to/templates');
+$twig = new \Twig\Environment($loader, array(
     'cache' => '/path/to/compilation_cache',
 ));
 
@@ -81,13 +81,13 @@ $container[\Slim\Views\Twig::class] = function (Container $container) {
         'cache' => $settings['twig']['cache_enabled'] ? $settings['twig']['cache_path']: false
     ]);
 
-    /* @var Twig_Loader_Filesystem $loader */
+    /** @var \Twig\Loader\FilesystemLoader $loader */
     $loader = $twig->getLoader();
     $loader->addPath($settings['public'], 'public');
 
     // Instantiate and add Slim specific extension
     $basePath = rtrim(str_ireplace('index.php', '', $container->get('request')->getUri()->getBasePath()), '/');
-    $twig->addExtension(new Slim\Views\TwigExtension($container->get('router'), $basePath));
+    $twig->addExtension(new \Slim\Views\TwigExtension($container->get('router'), $basePath));
     
     // Add the Assets extension to Twig
     $twig->addExtension(new \Odan\Twig\TwigAssetsExtension($twig->getEnvironment(), $settings['assets']));
