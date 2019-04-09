@@ -10,8 +10,8 @@ use InvalidArgumentException;
 use Symfony\Component\Cache\Adapter\AbstractAdapter;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
-use Twig\Environment as TwigEnvironment;
-use Twig\Error\LoaderError as TwigErrorLoader;
+use Twig\Environment;
+use Twig\Error\LoaderError;
 use Twig\Loader\LoaderInterface;
 
 /**
@@ -59,7 +59,7 @@ class TwigAssetsEngine
     /**
      * Create new instance.
      *
-     * @param TwigEnvironment $env
+     * @param Environment $env Twig
      * @param array $options
      * - cache_adapter: The assets cache adapter. false or AbstractAdapter
      * - cache_name: Default is 'assets-cache'
@@ -73,7 +73,7 @@ class TwigAssetsEngine
      *
      * @throws Exception
      */
-    public function __construct(TwigEnvironment $env, array $options)
+    public function __construct(Environment $env, array $options)
     {
         $this->loader = $env->getLoader();
 
@@ -106,8 +106,6 @@ class TwigAssetsEngine
      *
      * @param array $assets
      * @param array $options
-     *
-     * @throws InvalidArgumentException
      *
      * @return string content
      */
@@ -146,11 +144,11 @@ class TwigAssetsEngine
     /**
      * Resolve real asset filenames.
      *
-     * @param array|mixed $assets
+     * @param array $assets
      *
      * @return array assets
      */
-    private function prepareAssets($assets): array
+    private function prepareAssets(array $assets): array
     {
         $result = [];
         foreach ((array)$assets as $name) {
@@ -165,7 +163,7 @@ class TwigAssetsEngine
      *
      * @param string $file
      *
-     * @throws TwigErrorLoader
+     * @throws LoaderError
      *
      * @return string
      */
@@ -181,15 +179,15 @@ class TwigAssetsEngine
     /**
      * Get cache key.
      *
-     * @param array|mixed $assets
-     * @param array|mixed|null $settings
+     * @param array $assets
+     * @param array $settings
      *
      * @return string
      */
-    private function getCacheKey($assets, $settings = null): string
+    private function getCacheKey(array $assets, array $settings): string
     {
         $keys = [];
-        foreach ((array)$assets as $file) {
+        foreach ($assets as $file) {
             $keys[] = sha1_file($file);
         }
         $keys[] = sha1(serialize($settings));
@@ -209,6 +207,7 @@ class TwigAssetsEngine
     {
         $contents = [];
         $public = '';
+
         foreach ($assets as $asset) {
             if ($this->isExternalUrl($asset)) {
                 // External url
@@ -235,9 +234,8 @@ class TwigAssetsEngine
 
             $contents[] = sprintf('<link rel="stylesheet" type="text/css" href="%s" media="all" />', $url);
         }
-        $result = implode("\n", $contents);
 
-        return $result;
+        return implode("\n", $contents);
     }
 
     /**
@@ -257,6 +255,8 @@ class TwigAssetsEngine
      *
      * @param string $fileName Name of default CSS file
      * @param bool $minify Minify css if true
+     *
+     * @throws RuntimeException
      *
      * @return string CSS code
      */
@@ -324,6 +324,8 @@ class TwigAssetsEngine
      *
      * @param string $file Name of default JS file
      * @param bool $minify Minify js if true
+     *
+     * @throws RuntimeException
      *
      * @return string JavaScript code
      */
