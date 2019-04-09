@@ -151,7 +151,7 @@ class TwigAssetsEngine
     private function prepareAssets(array $assets): array
     {
         $result = [];
-        foreach ((array)$assets as $name) {
+        foreach ($assets as $name) {
             $result[] = $this->getRealFilename($name);
         }
 
