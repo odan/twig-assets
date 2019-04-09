@@ -10,7 +10,7 @@
     "css",
     "minify"
   ],
-  "homepage": "http://github.com/odan/plates-asset-cache",
+  "homepage": "https://github.com/odan/twig-assets",
   "license": "MIT",
   "authors": [
     {
