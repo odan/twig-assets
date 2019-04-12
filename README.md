@@ -205,7 +205,7 @@ You should inform the browser where to find the web assets with a `base href` in
 ### Clearing the internal cache
 
 ```php
-use Odan\Twig;
+use Odan\Twig\TwigAssetsCache;
 
 $settings = $container->get('settings');
 
@@ -219,7 +219,7 @@ $internalCache->clearCache();
 ### Clearing the public cache
 
 ```php
-use Odan\Twig;
+use Odan\Twig\TwigAssetsCache;
 
 $settings = $container->get('settings');
 
