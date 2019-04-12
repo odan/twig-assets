@@ -7,8 +7,8 @@ use Odan\Twig\TwigAssetsExtension;
 use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamDirectory;
 use PHPUnit\Framework\TestCase;
-use Twig_Environment;
-use Twig_Loader_Filesystem;
+use Twig\Environment;
+use Twig\Loader\FilesystemLoader;
 
 /**
  * BaseTest.
@@ -16,12 +16,12 @@ use Twig_Loader_Filesystem;
 abstract class AbstractTest extends TestCase
 {
     /**
-     * @var Twig_Loader_Filesystem
+     * @var FilesystemLoader
      */
     protected $loader;
 
     /**
-     * @var Twig_Environment
+     * @var Environment
      */
     protected $env;
 
@@ -79,7 +79,7 @@ abstract class AbstractTest extends TestCase
         vfsStream::newDirectory('templates')->at($this->root);
 
         $templatePath = vfsStream::url('root/templates');
-        $this->loader = new Twig_Loader_Filesystem([$templatePath]);
+        $this->loader = new FilesystemLoader([$templatePath]);
 
         // Add alias path: @public/ -> root/public
         $this->loader->addPath(vfsStream::url('root/public'), 'public');
@@ -90,7 +90,7 @@ abstract class AbstractTest extends TestCase
             //'cache_path' =>  $config['temp'] . '/twig-cache'
         ];
 
-        $this->env = new \Twig_Environment($this->loader, $options);
+        $this->env = new Environment($this->loader, $options);
         $this->extension = $this->newExtensionInstance();
     }
 

@@ -104,8 +104,8 @@ class TwigAssetsEngine
     /**
      * Render and compress JavaScript assets.
      *
-     * @param array $assets
-     * @param array $options
+     * @param array $assets assets
+     * @param array $options options
      *
      * @return string content
      */
@@ -144,7 +144,7 @@ class TwigAssetsEngine
     /**
      * Resolve real asset filenames.
      *
-     * @param array $assets
+     * @param array $assets assets
      *
      * @return array assets
      */
@@ -161,7 +161,7 @@ class TwigAssetsEngine
     /**
      * Returns full path and filename.
      *
-     * @param string $file
+     * @param string $file file
      *
      * @throws LoaderError
      *
@@ -179,10 +179,10 @@ class TwigAssetsEngine
     /**
      * Get cache key.
      *
-     * @param array $assets
-     * @param array $settings
+     * @param array $assets assets
+     * @param array $settings settings
      *
-     * @return string
+     * @return string key
      */
     private function getCacheKey(array $assets, array $settings): string
     {

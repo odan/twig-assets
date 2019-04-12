@@ -3,14 +3,14 @@
 namespace Odan\Twig;
 
 use Exception;
-use Twig_Environment;
-use Twig_Extension;
-use Twig_SimpleFunction;
+use Twig\Environment;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFunction;
 
 /**
- * TwigAssetsExtension.
+ * Twig Assets Extension.
  */
-class TwigAssetsExtension extends Twig_Extension
+class TwigAssetsExtension extends AbstractExtension
 {
     /**
      * @var TwigAssetsEngine
@@ -20,12 +20,12 @@ class TwigAssetsExtension extends Twig_Extension
     /**
      * TwigAssetsExtension constructor.
      *
-     * @param Twig_Environment $env
+     * @param Environment $env
      * @param array $options
      *
      * @throws Exception
      */
-    public function __construct(Twig_Environment $env, array $options)
+    public function __construct(Environment $env, array $options)
     {
         $this->engine = new TwigAssetsEngine($env, $options);
     }
@@ -37,7 +37,7 @@ class TwigAssetsExtension extends Twig_Extension
      */
     public function getFunctions()
     {
-        $function = new Twig_SimpleFunction('assets', [$this, 'assets'], [
+        $function = new TwigFunction('assets', [$this, 'assets'], [
             'needs_environment' => false,
             'is_safe' => ['html'],
         ]);

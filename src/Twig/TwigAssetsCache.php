@@ -71,7 +71,7 @@ class TwigAssetsCache
 
         $files = new FilesystemIterator($path);
 
-        /* @var SplFileInfo $file */
+        /** @var SplFileInfo $file */
         foreach ($files as $file) {
             $fileName = $file->getPathname();
             unlink($fileName);
