@@ -33,7 +33,7 @@
     "scripts": {
         "test": "php vendor/phpunit/phpunit/phpunit",
         "test-coverage": "php vendor/phpunit/phpunit/phpunit --coverage-clover build/logs/clover.xml --coverage-html build/coverage",
-        "install-cs-fixer": "php -r \"mkdir('build'); copy('https://cs.symfony.com/download/php-cs-fixer-v2.phar', 'build/php-cs-fixer-v2.phar');\"",
+        "install-cs-fixer": "php -r \"@mkdir('build'); copy('https://cs.symfony.com/download/php-cs-fixer-v2.phar', 'build/php-cs-fixer-v2.phar');\"",
         "fix-style": "php build/php-cs-fixer-v2.phar fix --config=.cs.php",
         "check-style": "php build/php-cs-fixer-v2.phar fix --dry-run --format=txt --verbose --diff --diff-format=udiff --config=.cs.php",
         "lint": "php -r \"array_map (function() { passthru('php -l ' . func_get_arg(0)); }, glob('{src/*.php,tests/*.php}', GLOB_BRACE));\"",
