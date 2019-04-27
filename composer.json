@@ -19,7 +19,7 @@
         }
     ],
     "require": {
-        "php": "^7.0",
+        "php": "^7.0|^6.0",
         "twig/extensions": "^1.5",
         "symfony/cache": "^3.2|4.0",
         "tubalmartin/cssmin": "^4.1",
