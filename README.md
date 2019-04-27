@@ -16,6 +16,10 @@ Caching and compression for Twig assets (JavaScript and CSS).
 composer install odan/twig-assets
 ```
 
+## Requirements
+
+* PHP 7.0+
+
 ## Configuration
 
 ```php
