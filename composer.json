@@ -1,44 +1,48 @@
 {
-  "name": "odan/twig-assets",
-  "type": "library",
-  "description": "Caching and compression for Twig assets (JavaScript and CSS).",
-  "keywords": [
-    "twig",
-    "assets",
-    "cache",
-    "javascript",
-    "css",
-    "minify"
-  ],
-  "homepage": "https://github.com/odan/twig-assets",
-  "license": "MIT",
-  "authors": [
-    {
-      "name": "odan",
-      "homepage": "https://github.com/odan"
+    "name": "odan/twig-assets",
+    "type": "library",
+    "description": "Caching and compression for Twig assets (JavaScript and CSS).",
+    "keywords": [
+        "twig",
+        "assets",
+        "cache",
+        "javascript",
+        "css",
+        "minify"
+    ],
+    "homepage": "https://github.com/odan/twig-assets",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "odan",
+            "homepage": "https://github.com/odan"
+        }
+    ],
+    "require": {
+        "php": "^7.0",
+        "twig/extensions": "^1.5",
+        "symfony/cache": "^3.2|4.0",
+        "tubalmartin/cssmin": "^4.1",
+        "mrclay/jsmin-php": "^2.4"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^7.0",
+        "mikey179/vfsstream": "^1.6",
+        "phpstan/phpstan-shim": "^0.11|^0.10|^0.9"
+    },
+    "scripts": {
+        "test": "php vendor/phpunit/phpunit/phpunit",
+        "test-coverage": "php vendor/phpunit/phpunit/phpunit --coverage-clover build/logs/clover.xml --coverage-html build/coverage",
+        "install-cs-fixer": "php -r \"mkdir('build'); copy('https://cs.symfony.com/download/php-cs-fixer-v2.phar', 'build/php-cs-fixer-v2.phar');\"",
+        "fix-style": "php build/php-cs-fixer-v2.phar fix --config=.cs.php",
+        "check-style": "php build/php-cs-fixer-v2.phar fix --dry-run --format=txt --verbose --diff --diff-format=udiff --config=.cs.php",
+        "lint": "php -r \"array_map (function() { passthru('php -l ' . func_get_arg(0)); }, glob('{src/*.php,tests/*.php}', GLOB_BRACE));\"",
+        "phpstan": "php vendor/phpstan/phpstan-shim/phpstan.phar analyse src tests --level=max -c phpstan.neon --no-progress"
+    },
+    "autoload": {
+        "psr-4": {
+            "Odan\\": "src",
+            "Odan\\Test\\": "tests"
+        }
     }
-  ],
-  "require": {
-    "php": "^7.0",
-    "twig/extensions": "^1.5",
-    "symfony/cache": "^3.2|4.0",
-    "tubalmartin/cssmin": "^4.1",
-    "mrclay/jsmin-php": "^2.4"
-  },
-  "require-dev": {
-    "phpunit/phpunit": "^7.0",
-    "mikey179/vfsstream": "^1.6"
-  },
-  "scripts": {
-    "test": "phpunit",
-    "test-coverage": "phpunit --coverage-clover build/logs/clover.xml --coverage-html build/coverage",
-    "check-style": "phpcs -p --standard=PSR2 --runtime-set ignore_errors_on_exit 1 --runtime-set ignore_warnings_on_exit 1 src tests",
-    "fix-style": "phpcbf -p --standard=PSR2 --runtime-set ignore_errors_on_exit 1 --runtime-set ignore_warnings_on_exit -n --no-patch 1 src tests"
-  },
-  "autoload": {
-    "psr-4": {
-      "Odan\\": "src",
-      "Odan\\Test\\": "tests"
-    }
-  }
 }

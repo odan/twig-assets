@@ -20,9 +20,8 @@ before_script:
   - cd $TRAVIS_BUILD_DIR
 
 script:
-  - ant phpstan
-  - vendor/bin/phpunit --coverage-text --coverage-clover=coverage.clover
-
-#after_success:
-#  - if [ "$TRAVIS_PHP_VERSION" == "7.1" ]; then wget https://scrutinizer-ci.com/ocular.phar; fi
-#  - if [ "$TRAVIS_PHP_VERSION" == "7.1" ]; then php ocular.phar code-coverage:upload --format=php-clover coverage.clover; fi
+  - composer lint
+  - composer install-cs-fixer
+  - composer check-style
+  - composer phpstan
+  - composer test-coverage

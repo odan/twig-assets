@@ -1,10 +1,8 @@
 filter:
+    paths: ["src/*"]
     excluded_paths:
         - "tests/"
-        - "resources/"
         - "vendor/"
-        - "src/CssMin/"
-        - "src/JsMin/"
 
 checks:
     php:
@@ -26,15 +24,19 @@ build:
         memcached: false
         neo4j: false
         rabbitmq: false
-    tests:
-        before:
-            -
-                command: 'vendor/bin/phpunit --coverage-clover build/logs/clover.xml'
-                coverage:
-                    file: 'build/logs/clover.xml'
-                    format: 'clover'
     nodes:
         analysis:
             tests:
                 override:
                     - php-scrutinizer-run
+    dependencies:
+        before:
+            - composer self-update
+            - composer update --no-interaction --prefer-dist --no-progress
+    tests:
+        before:
+            -
+                command: composer test-coverage
+                coverage:
+                    file: 'build/logs/clover.xml'
+                    format: 'clover'
