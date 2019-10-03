@@ -112,7 +112,7 @@ class TwigAssetsEngine
     public function assets(array $assets, array $options = []): string
     {
         $assets = $this->prepareAssets($assets);
-        $options = array_replace_recursive($this->options, $options);
+        $options = (array)array_replace_recursive($this->options, $options);
 
         $cacheKey = $this->getCacheKey($assets, $options);
         $cacheItem = $this->cache->getItem($cacheKey);
