@@ -60,7 +60,7 @@ class TwigAssetsEngine
      * Create new instance.
      *
      * @param Environment $env Twig
-     * @param array $options
+     * @param array $options The options
      * - cache_adapter: The assets cache adapter. false or AbstractAdapter
      * - cache_name: Default is 'assets-cache'
      * - cache_lifetime: Default is 0
