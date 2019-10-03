@@ -91,7 +91,11 @@ class TwigAssetsEngine
         $this->publicCache = new PublicAssetsCache($options['path'], $chmod);
 
         if (!empty($options['cache_path'])) {
-            $this->cache = new FilesystemAdapter($options['cache_name'], $options['cache_lifetime'], $options['cache_path']);
+            $this->cache = new FilesystemAdapter(
+                $options['cache_name'],
+                $options['cache_lifetime'],
+                $options['cache_path']
+            );
         } else {
             $this->cache = new ArrayAdapter();
         }
@@ -104,8 +108,8 @@ class TwigAssetsEngine
     /**
      * Render and compress JavaScript assets.
      *
-     * @param array $assets assets
-     * @param array $options options
+     * @param array $assets Assets
+     * @param array $options Options
      *
      * @return string content
      */
@@ -144,7 +148,7 @@ class TwigAssetsEngine
     /**
      * Resolve real asset filenames.
      *
-     * @param array $assets assets
+     * @param array $assets Assets
      *
      * @return array assets
      */
@@ -161,7 +165,7 @@ class TwigAssetsEngine
     /**
      * Returns full path and filename.
      *
-     * @param string $file file
+     * @param string $file File
      *
      * @throws LoaderError
      *
@@ -179,8 +183,8 @@ class TwigAssetsEngine
     /**
      * Get cache key.
      *
-     * @param array $assets assets
-     * @param array $settings settings
+     * @param array $assets Assets
+     * @param array $settings Settings
      *
      * @return string key
      */
@@ -198,8 +202,8 @@ class TwigAssetsEngine
     /**
      * Render and compress CSS assets.
      *
-     * @param array $assets
-     * @param array $options
+     * @param array $assets Array of asset that would be embed to css
+     * @param array $options Array of option / setting
      *
      * @return string content
      */
@@ -241,7 +245,7 @@ class TwigAssetsEngine
     /**
      * Check if url is valid.
      *
-     * @param string $url
+     * @param string $url External url that to be validated
      *
      * @return bool
      */
