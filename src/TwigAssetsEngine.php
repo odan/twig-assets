@@ -3,13 +3,13 @@
 namespace Odan\Twig;
 
 use Exception;
-use RuntimeException;
-use tubalmartin\CssMin\Minifier as CssMinifier;
-use JSMin\JSMin;
 use InvalidArgumentException;
+use JSMin\JSMin;
+use RuntimeException;
 use Symfony\Component\Cache\Adapter\AbstractAdapter;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
+use tubalmartin\CssMin\Minifier as CssMinifier;
 use Twig\Environment;
 use Twig\Error\LoaderError;
 use Twig\Loader\LoaderInterface;
