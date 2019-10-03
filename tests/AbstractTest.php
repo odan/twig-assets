@@ -1,6 +1,6 @@
 <?php
 
-namespace Odan\Test;
+namespace Odan\Twig\Test;
 
 use Odan\Twig\TwigAssetsEngine;
 use Odan\Twig\TwigAssetsExtension;
