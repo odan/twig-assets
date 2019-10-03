@@ -15,15 +15,13 @@ class TwigAssetsExtension extends AbstractExtension
     /**
      * @var TwigAssetsEngine
      */
-    private $engine = null;
+    private $engine;
 
     /**
      * TwigAssetsExtension constructor.
      *
-     * @param Environment $env
-     * @param array $options
-     *
-     * @throws Exception
+     * @param Environment $env The environment
+     * @param array $options The options
      */
     public function __construct(Environment $env, array $options)
     {
@@ -33,7 +31,7 @@ class TwigAssetsExtension extends AbstractExtension
     /**
      * Get functions.
      *
-     * @return array
+     * @return array The functions
      */
     public function getFunctions()
     {
@@ -50,7 +48,7 @@ class TwigAssetsExtension extends AbstractExtension
     /**
      * Assets function.
      *
-     * @return string
+     * @return string The assets
      */
     public function assets()
     {
