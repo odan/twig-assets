@@ -1,6 +1,6 @@
 # Twig Assets Extension
 
-Caching and compression for Twig assets (JavaScript and CSS).
+Caching and compression for Twig assets (JavaScript and CSS), inspired by [Symfony Web Assets](https://symfony.com/doc/3.0/best_practices/web-assets.html).
 
 [![Latest Version on Packagist](https://img.shields.io/github/release/odan/twig-assets.svg)](https://github.com/odan/twig-assets/releases)
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg)](LICENSE.md)
@@ -68,7 +68,112 @@ $twig = new \Twig\Environment($loader, array(
 $twig->addExtension(new \Odan\Twig\TwigAssetsExtension($twig, $options));
 ```
 
-### Slim Framework
+### Slim 4 Framework
+
+Requirements
+
+* [Slim Framework Twig View](https://github.com/slimphp/Twig-View)
+
+Run:
+
+```
+composer require slim/twig-view ^3.0.0-beta
+```
+
+Add these settings:
+
+```php
+// View settings
+$settings['twig'] = [
+    'path' => __DIR__ . '/../templates',
+    // Should be set to true in production
+    'cache_enabled' => false,
+    'cache_path' => __DIR__ . '/../tmp/twig-cache',
+];
+
+// Assets
+$settings['assets'] = [
+    // Public assets cache directory
+    'path' => __DIR__ . '/../public/cache',
+    'url_base_path' => 'cache/',
+    // Cache settings
+    'cache_enabled' => true,
+    'cache_path' =>__DIR__ . '/../tmp',
+    'cache_name' => 'assets-cache',
+    // Enable JavaScript and CSS compression
+    'minify' => 0,
+];
+```
+
+Register the container entry:
+
+_Note: This example uses the phpleage/container_
+
+```php
+<?php
+// config/container.php
+
+use League\Container\Container;
+use League\Container\ReflectionContainer;
+use Psr\Container\ContainerInterface;
+use Odan\Twig\TwigAssetsExtension;
+use Slim\App;
+use Slim\Factory\AppFactory;
+use Slim\Views\Twig;
+use Twig\Loader\FilesystemLoader;
+
+$container = new Container();
+
+$container->delegate(new ReflectionContainer());
+
+// ...
+
+// Twig templates
+$container->share(Twig::class, static function (ContainerInterface $container) {
+    $settings = $container->get('settings');
+    $twigSettings = $settings['twig'];
+
+    $twig = new Twig($twigSettings['path'], [
+        'cache' => $twigSettings['cache_enabled'] ? $twigSettings['cache_path'] : false,
+    ]);
+
+    $loader = $twig->getLoader();
+    if ($loader instanceof FilesystemLoader) {
+        $loader->addPath($settings['public'], 'public');
+    }
+
+    $environment = $twig->getEnvironment();
+
+    // Add relative base url
+    $basePath = $container->get(App::class)->getBasePath();
+    $environment->addGlobal('base_path', $basePath . '/');
+
+    // Add Twig extensions
+    $twig->addExtension(new TwigAssetsExtension($environment, (array)$settings['assets']));
+
+    return $twig;
+})->addArgument($container);
+
+// Application settings
+$container->share('settings', static function () {
+    return require __DIR__ . '/settings.php';
+});
+
+// Slim App
+$container->share(App::class, static function (ContainerInterface $container) {
+    AppFactory::setContainer($container);
+    $app = AppFactory::create();
+
+    // Optional: Set the base path to run the app in a subdirectory.
+    //$app->setBasePath('/sub-directory');
+
+    return $app;
+})->addArgument($container);
+```
+
+Read more: [Usage](#usage)
+
+### Slim 3 Framework
 
 Requirements
 
@@ -233,3 +338,18 @@ $publicAssetsCachePath = $settings['assets']['path'];
 $internalCache = new TwigAssetsCache($publicAssetsCachePath);
 $internalCache->clearCache();
 ```
+
+## Testing
+
+```bash
+composer test
+```
+
+## Similar libraries
+
+* [Webpack](https://webpack.js.org/)
+
+
+## License
+
+The MIT License (MIT). Please see [License File](LICENSE) for more information.
