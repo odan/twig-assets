@@ -92,7 +92,7 @@ $settings['public'] = $settings['root'] . '/public';
 $settings['twig'] = [
     'path' => $settings['root'] . '/templates',
     // Should be set to true in production
-    'cache_enabled' => true,
+    'cache_enabled' => false,
     'cache_path' => $settings['temp'] . '/twig-cache',
 ];
 
@@ -106,7 +106,7 @@ $settings['assets'] = [
     'cache_path' => $settings['temp'],
     'cache_name' => 'assets-cache',
     //  Should be set to 1 (enabled) in production
-    'minify' => 1,
+    'minify' => 0,
 ];
 ```
 
