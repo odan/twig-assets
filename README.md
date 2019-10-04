@@ -72,7 +72,7 @@ $twig->addExtension(new \Odan\Twig\TwigAssetsExtension($twig, $options));
 
 Requirements
 
-* [Slim Framework Twig View](https://github.com/slimphp/Twig-View)
+* [Slim Framework Twig View](https://github.com/slimphp/Twig-View/tree/3.x)
 
 Run:
 
@@ -110,7 +110,7 @@ $settings['assets'] = [
 ];
 ```
 
-Register the container entry:
+Register the container entry with PHP-DI: https://github.com/slimphp/Twig-View/tree/3.x#usage
 
 _Note: This example uses the phpleage/container_
 
@@ -149,10 +149,6 @@ $container->share(Twig::class, static function (ContainerInterface $container) {
 
     $environment = $twig->getEnvironment();
 
-    // Add relative base url
-    $basePath = $container->get(App::class)->getBasePath();
-    $environment->addGlobal('base_path', $basePath . '/');
-
     // Add Twig extensions
     $twig->addExtension(new TwigAssetsExtension($environment, (array)$settings['assets']));
 
@@ -174,6 +170,22 @@ $container->share(App::class, static function (ContainerInterface $container) {
 
     return $app;
 })->addArgument($container);
+```
+
+**Optional:** Add a name to your "/" route in `routes.php` to create a base href in your page header:
+
+```php
+$app->get('/', \App\Action\Home\HomeAction::class)->setName('root');
+```
+
+```twig
+<html>
+    <head>
+        <base href="{{ path_for('root') }}"/>
+    </head>
+    <body>
+    </body>
+</html>
 ```
 
 Read more: [Usage](#usage)
@@ -309,10 +321,9 @@ You should inform the browser where to find the web assets with a `base href` in
 <head>
     <meta charset="utf-8">
     <!-- other stuff -->
-    <base href="{{ base_url() }}/"/>
+    <base href="{{ url_for('root') }}"/>
     <!-- other stuff -->
 ```
-[Full example](https://github.com/odan/prisma/blob/master/templates/Layout/layout.twig#L10)
 
 ## Clearing the cache
 
@@ -353,7 +364,7 @@ composer test
 ## Similar libraries
 
 * [Webpack](https://webpack.js.org/)
-
+* [Compiling Assets with Webpack](https://odan.github.io/2019/09/21/slim4-compiling-assets-with-webpack.html)
 
 ## License
 
