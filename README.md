@@ -172,7 +172,20 @@ $container->share(App::class, static function (ContainerInterface $container) {
 })->addArgument($container);
 ```
 
-**Optional:** Add a name to your "/" route in `routes.php` to create a base href in your page header:
+Then register the TwigMiddleware. In this case we pass the full
+class name `Twig::class` as the second parameter, because the
+container entry is defined with the name too.
+
+```php
+use Slim\Views\Twig;
+use Slim\Views\TwigMiddleware;
+
+// ...
+
+$app->add(TwigMiddleware::createFromContainer($app, Twig::class));
+```
+
+**Optional:** Add a name (e.g. `root`) to your "/" route in `routes.php` to create a base href in your html header:
 
 ```php
 $app->get('/', \App\Action\Home\HomeAction::class)->setName('root');
