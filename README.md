@@ -122,8 +122,6 @@ use League\Container\Container;
 use League\Container\ReflectionContainer;
 use Psr\Container\ContainerInterface;
 use Odan\Twig\TwigAssetsExtension;
-use Slim\App;
-use Slim\Factory\AppFactory;
 use Slim\Views\Twig;
 use Twig\Loader\FilesystemLoader;
 
@@ -159,17 +157,6 @@ $container->share(Twig::class, static function (ContainerInterface $container) {
 $container->share('settings', static function () {
     return require __DIR__ . '/settings.php';
 });
-
-// Slim App
-$container->share(App::class, static function (ContainerInterface $container) {
-    AppFactory::setContainer($container);
-    $app = AppFactory::create();
-
-    // Optional: Set the base path to run the app in a subdirectory.
-    //$app->setBasePath('/sub-directory');
-
-    return $app;
-})->addArgument($container);
 ```
 
 Then register the TwigMiddleware. In this case we pass the full
