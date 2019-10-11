@@ -47,7 +47,9 @@ class TwigAssetsCache
      */
     public function clearCache(): bool
     {
-        return $this->removeDirectory($this->directory);
+        $this->removeDirectory($this->directory);
+
+        return mkdir($this->directory);
     }
 
     /**

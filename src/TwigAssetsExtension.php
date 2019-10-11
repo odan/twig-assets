@@ -2,7 +2,6 @@
 
 namespace Odan\Twig;
 
-use Exception;
 use Twig\Environment;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
