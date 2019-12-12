@@ -77,7 +77,7 @@ Requirements
 Run:
 
 ```
-composer require slim/twig-view ^3.0.0-beta
+composer require slim/twig-view "^3.0.0-beta"
 ```
 
 Add these settings:
@@ -110,58 +110,48 @@ $settings['assets'] = [
 ];
 ```
 
-Register the container entry with PHP-DI: https://github.com/slimphp/Twig-View/tree/3.x#usage
-
-_Note: This example uses the phpleage/container_
+Register the container entry with [PHP-DI](https://github.com/slimphp/Twig-View/tree/3.x#usage)
 
 ```php
 <?php
-// config/container.php
 
-use League\Container\Container;
-use League\Container\ReflectionContainer;
-use Psr\Container\ContainerInterface;
 use Odan\Twig\TwigAssetsExtension;
+use Psr\Container\ContainerInterface;
+use Slim\App;
+use Slim\Factory\AppFactory;
 use Slim\Views\Twig;
 use Twig\Loader\FilesystemLoader;
 
-$container = new Container();
+return [
+    // ...
 
-$container->delegate(new ReflectionContainer());
+    Twig::class => function (ContainerInterface $container) {
+        $settings = $container->get('settings');
+        $twigSettings = $settings['twig'];
 
-// ...
+        $twig = new Twig($twigSettings['path'], [
+            'cache' => $twigSettings['cache_enabled'] ? $twigSettings['cache_path'] : false,
+        ]);
 
-// Twig templates
-$container->share(Twig::class, static function (ContainerInterface $container) {
-    $settings = $container->get('settings');
-    $twigSettings = $settings['twig'];
+        $loader = $twig->getLoader();
+        if ($loader instanceof FilesystemLoader) {
+            $loader->addPath($settings['public'], 'public');
+        }
 
-    $twig = new Twig($twigSettings['path'], [
-        'cache' => $twigSettings['cache_enabled'] ? $twigSettings['cache_path'] : false,
-    ]);
+        $environment = $twig->getEnvironment();
 
-    $loader = $twig->getLoader();
-    if ($loader instanceof FilesystemLoader) {
-        $loader->addPath($settings['public'], 'public');
-    }
+        // Add Twig extensions
+        $twig->addExtension(new TwigAssetsExtension($environment, (array)$settings['assets']));
 
-    $environment = $twig->getEnvironment();
+        return $twig;
+    },
 
-    // Add Twig extensions
-    $twig->addExtension(new TwigAssetsExtension($environment, (array)$settings['assets']));
-
-    return $twig;
-})->addArgument($container);
-
-// Application settings
-$container->share('settings', static function () {
-    return require __DIR__ . '/settings.php';
-});
+];
 ```
 
-Then register the TwigMiddleware. In this case we pass the full
+Add the `TwigMiddleware`. In this case we pass the full
 class name `Twig::class` as the second parameter, because the
-container entry is defined with the name too.
+container entry is defined with the same name.
 
 ```php
 use Slim\Views\Twig;
@@ -172,18 +162,68 @@ use Slim\Views\TwigMiddleware;
 $app->add(TwigMiddleware::createFromContainer($app, Twig::class));
 ```
 
-**Optional:** Add a name (e.g. `root`) to your "/" route in `routes.php` to create a base href in your html header:
+Add a route, e.g. in `confg/routes.php`:
 
 ```php
 $app->get('/', \App\Action\Home\HomeAction::class)->setName('root');
 ```
 
+Create a action class, e.g. `src/Action/HomeAction.php`:
+
+```php
+<?php
+
+namespace App\Action\Home;
+
+use Psr\Http\Message\ResponseInterface;
+use Slim\Http\Response;
+use Slim\Http\ServerRequest;
+use Slim\Views\Twig;
+
+/**
+ * Action.
+ */
+final class HomeAction
+{
+    /**
+     * @var Twig
+     */
+    private $twig;
+
+    /**
+     * The constructor.
+     *
+     * @param Twig $twig The twig engine
+     */
+    public function __construct(Twig $twig)
+    {
+        $this->twig = $twig;
+    }
+
+    /**
+     * Action.
+     *
+     * @param ServerRequest $request The request
+     * @param Response $response The response
+     *
+     * @return ResponseInterface The response
+     */
+    public function __invoke(ServerRequest $request, Response $response): ResponseInterface
+    {
+        return $this->twig->render($response, 'home/home.twig');
+    }
+}
+```
+
+The (pseudo) content of `templates/home/home.twig`:
+
 ```twig
 <html>
     <head>
-        <base href="{{ path_for('root') }}"/>
+        {{ assets({files: ['home/index.css']}) }}
     </head>
     <body>
+        {{ assets({files: ['home/index.js']}) }}
     </body>
 </html>
 ```
