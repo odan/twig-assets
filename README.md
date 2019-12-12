@@ -129,7 +129,7 @@ return [
         $settings = $container->get('settings');
         $twigSettings = $settings['twig'];
 
-        $twig = new Twig($twigSettings['path'], [
+        $twig = Twig::create($twigSettings['path'], [
             'cache' => $twigSettings['cache_enabled'] ? $twigSettings['cache_path'] : false,
         ]);
 
