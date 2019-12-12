@@ -189,7 +189,7 @@ class TwigAssetsEngine
             $keys[] = sha1_file($file);
         }
 
-        // Exclude none from cache
+        // Exclude nonce from cache
         unset($settings['nonce']);
 
         $keys[] = sha1((string)json_encode($settings));
