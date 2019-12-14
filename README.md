@@ -276,6 +276,7 @@ files | array | [] | yes | All assets to be delivered to the browser. [Namespace
 inline | bool | false | no | Defines whether the browser downloads the assets inline or via URL.
 minify | bool | true | no | Specifies whether JS/CSS compression is enabled or disabled.
 name | string | file | no | Defines the output file name within the URL.
+nonce | string | | no | The CSP (content security policy) nonce (per request)
 
 ### Template
 
