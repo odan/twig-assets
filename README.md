@@ -18,7 +18,7 @@ composer install odan/twig-assets
 
 ## Requirements
 
-* PHP 7.0+
+* PHP 7.1+
 
 ## Configuration
 
