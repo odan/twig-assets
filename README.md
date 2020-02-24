@@ -77,7 +77,7 @@ Requirements
 Run:
 
 ```
-composer require slim/twig-view "^3.0.0-beta"
+composer require slim/twig-view "^3.0.0"
 ```
 
 Add these settings:
@@ -110,7 +110,7 @@ $settings['assets'] = [
 ];
 ```
 
-Register the container entry with [PHP-DI](https://github.com/slimphp/Twig-View/tree/3.x#usage)
+Add a container definition with [PHP-DI](https://github.com/slimphp/Twig-View/tree/3.x#usage)
 
 ```php
 <?php
