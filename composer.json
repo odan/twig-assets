@@ -19,7 +19,7 @@
         }
     ],
     "require": {
-        "php": "^7.1",
+        "php": "^7.2.5",
         "symfony/cache": "^4.2.12|^5.0",
         "tubalmartin/cssmin": "^4.1",
         "mrclay/jsmin-php": "^2.4"
