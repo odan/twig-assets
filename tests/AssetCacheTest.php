@@ -2,22 +2,28 @@
 
 namespace Odan\Twig\Test;
 
+use Exception;
 use Odan\Twig\PublicAssetsCache;
 use org\bovigo\vfs\vfsStream;
 
 /**
- * AssetCacheTest.
+ * Test.
  *
  * @coversDefaultClass \Odan\Twig\PublicAssetsCache
  */
 class AssetCacheTest extends AbstractTest
 {
+    /**
+     * @var string
+     */
     protected $cacheBustedRegex = '/^cache\/cache\.[a-zA-Z0-9]{36}/';
 
     /**
+     * Create inctance.
+     *
      * @return PublicAssetsCache
      */
-    public function newInstance()
+    public function newInstance(): PublicAssetsCache
     {
         return new PublicAssetsCache(vfsStream::url('root/public/cache'), 0750);
     }
@@ -27,7 +33,7 @@ class AssetCacheTest extends AbstractTest
      *
      * @return void
      */
-    public function testInstance()
+    public function testInstance(): void
     {
         $this->assertInstanceOf(PublicAssetsCache::class, $this->newInstance());
     }
@@ -36,10 +42,10 @@ class AssetCacheTest extends AbstractTest
      * Test create object.
      *
      * @return void
-     * @expectedException \Exception
      */
-    public function testInstanceError()
+    public function testInstanceError(): void
     {
+        $this->expectException(Exception::class);
         $cache = new PublicAssetsCache(vfsStream::url('root/nada'));
         $this->assertInstanceOf(PublicAssetsCache::class, $cache);
     }
@@ -49,7 +55,7 @@ class AssetCacheTest extends AbstractTest
      *
      * @return void
      */
-    public function testCreateCacheBustedUrl()
+    public function testCreateCacheBustedUrl(): void
     {
         $cache = $this->newInstance();
         $actual = $cache->createCacheBustedUrl(vfsStream::url('root/public/cache'), 'content', 'cache/');
@@ -61,7 +67,7 @@ class AssetCacheTest extends AbstractTest
      *
      * @return void
      */
-    public function testCreateCacheBustedNormalUrl()
+    public function testCreateCacheBustedNormalUrl(): void
     {
         $cache = $this->newInstance();
         $actual = $cache->createCacheBustedUrl(vfsStream::url('root/public/cache/aa/file.js'), 'content', 'cache/');
@@ -73,7 +79,7 @@ class AssetCacheTest extends AbstractTest
      *
      * @return void
      */
-    public function testCreateCacheBustedAdBlockedUrl()
+    public function testCreateCacheBustedAdBlockedUrl(): void
     {
         $cache = $this->newInstance();
         $actual = $cache->createCacheBustedUrl(vfsStream::url('root/public/cache/ad/file.js'), 'content', 'cache/');

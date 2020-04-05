@@ -45,15 +45,15 @@ class TwigAssetsEngine
     /**
      * Default options.
      *
-     * @var array
+     * @var array<mixed>
      */
-    private $options = [];
+    private $options;
 
     /**
      * Create new instance.
      *
      * @param Environment $env Twig
-     * @param array $options The options
+     * @param array<mixed> $options The options
      * - cache_adapter: The assets cache adapter. false or AbstractAdapter
      * - cache_name: Default is 'assets-cache'
      * - cache_lifetime: Default is 0
@@ -114,8 +114,8 @@ class TwigAssetsEngine
     /**
      * Render and compress JavaScript assets.
      *
-     * @param array $assets Assets
-     * @param array $options Options
+     * @param array<mixed> $assets Assets
+     * @param array<mixed> $options Options
      *
      * @return string The content
      */
@@ -144,9 +144,9 @@ class TwigAssetsEngine
     /**
      * Resolve real asset filenames.
      *
-     * @param array $assets Assets
+     * @param array<mixed> $assets Assets
      *
-     * @return array assets
+     * @return array<mixed> The assets
      */
     private function prepareAssets(array $assets): array
     {
@@ -177,8 +177,8 @@ class TwigAssetsEngine
     /**
      * Get cache key.
      *
-     * @param array $assets Assets
-     * @param array $settings Settings
+     * @param array<mixed> $assets Assets
+     * @param array<mixed> $settings Settings
      *
      * @return string The cache key
      */
@@ -200,8 +200,8 @@ class TwigAssetsEngine
     /**
      * Render and compress CSS assets.
      *
-     * @param array $assets Array of asset that would be embed to css
-     * @param array $options Array of option / setting
+     * @param array<mixed> $assets Array of asset that would be embed to css
+     * @param array<mixed> $options Array of option / setting
      *
      * @return string The CSS content
      */
@@ -261,7 +261,7 @@ class TwigAssetsEngine
      * Render html element.
      *
      * @param string $name The element name
-     * @param array $attributes The attributes
+     * @param array<mixed> $attributes The attributes
      * @param string $content The content
      * @param bool $closingTags Has closing tags
      *
@@ -284,7 +284,7 @@ class TwigAssetsEngine
      *
      * @param string $url External url that to be validated
      *
-     * @return bool
+     * @return bool The status
      */
     private function isExternalUrl($url): bool
     {
@@ -329,8 +329,8 @@ class TwigAssetsEngine
     /**
      * Render and compress CSS assets.
      *
-     * @param array $assets Assets
-     * @param array $options Options
+     * @param array<mixed> $assets Assets
+     * @param array<mixed> $options Options
      *
      * @return string The content
      */
@@ -377,10 +377,10 @@ class TwigAssetsEngine
     /**
      * Create array of html attributes.
      *
-     * @param array $attributes The default values
-     * @param array $options The options
+     * @param array<mixed> $attributes The default values
+     * @param array<mixed> $options The options
      *
-     * @return array The html attributes
+     * @return array<mixed> The html attributes
      */
     private function createAttributes(array $attributes, array $options): array
     {

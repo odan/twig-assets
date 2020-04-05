@@ -20,7 +20,7 @@ class TwigAssetsExtension extends AbstractExtension
      * TwigAssetsExtension constructor.
      *
      * @param Environment $env The environment
-     * @param array $options The options
+     * @param array<mixed> $options The options
      */
     public function __construct(Environment $env, array $options)
     {
@@ -30,7 +30,7 @@ class TwigAssetsExtension extends AbstractExtension
     /**
      * Get functions.
      *
-     * @return array The functions
+     * @return array<mixed> The functions
      */
     public function getFunctions()
     {
@@ -49,7 +49,7 @@ class TwigAssetsExtension extends AbstractExtension
      *
      * @return string The assets
      */
-    public function assets()
+    public function assets(): string
     {
         $params = func_get_args();
         $assets = $params[0]['files'];

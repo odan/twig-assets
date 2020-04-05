@@ -50,12 +50,14 @@ abstract class AbstractTest extends TestCase
     protected $styleInlineFileRegex = '/^\<link rel=\"stylesheet\" type=\"text\/css\" href=\"file\.[a-zA-Z0-9]{36}/';
 
     /**
-     * @var array
+     * @var array<mixed>
      */
     protected $options = [];
 
     /**
      * Set up.
+     *
+     * @return void
      */
     public function setUp()
     {
@@ -95,19 +97,21 @@ abstract class AbstractTest extends TestCase
     }
 
     /**
-     * @return TwigAssetsExtension
+     * Create extension.
+     *
+     * @return TwigAssetsExtension The extension
      */
-    public function newExtensionInstance()
+    public function newExtensionInstance(): TwigAssetsExtension
     {
         return new TwigAssetsExtension($this->env, $this->options);
     }
 
     /**
-     * @throws \Exception
+     * Create instance.
      *
-     * @return TwigAssetsEngine
+     * @return TwigAssetsEngine The engine
      */
-    public function newTwigAssetsEngineInstance()
+    public function newTwigAssetsEngineInstance(): TwigAssetsEngine
     {
         return new TwigAssetsEngine($this->env, $this->options);
     }
