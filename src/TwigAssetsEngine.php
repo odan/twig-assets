@@ -16,7 +16,7 @@ use Twig\Loader\LoaderInterface;
 /**
  * Extension that adds the ability to cache and minify assets.
  */
-class TwigAssetsEngine
+final class TwigAssetsEngine
 {
     /**
      * @var LoaderInterface

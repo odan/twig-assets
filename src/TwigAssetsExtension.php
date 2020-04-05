@@ -9,7 +9,7 @@ use Twig\TwigFunction;
 /**
  * Twig Assets Extension.
  */
-class TwigAssetsExtension extends AbstractExtension
+final class TwigAssetsExtension extends AbstractExtension
 {
     /**
      * @var TwigAssetsEngine
