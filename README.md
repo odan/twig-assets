@@ -363,7 +363,7 @@ You should inform the browser where to find the web assets with a `base href` in
 <head>
     <meta charset="utf-8">
     <!-- other stuff -->
-    <base href="{{ url_for('root') }}"/>
+    <base href="{{ base_path() }}/"/>
     <!-- other stuff -->
 ```
 
