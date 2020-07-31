@@ -351,6 +351,24 @@ Content of `home.twig`:
 {% endblock %}
 ```
 
+#### Add custom attributes to the html element
+
+**WARNING:** you can override ANY attribute including i.e. `href`. Be careful here as it can cause unwanted results.
+
+```twig
+{{ assets({files: [
+    '@public/css/default.css',
+    '@public/css/print.css',
+    'User/user-edit.css'
+    ], attributes: {
+    rel: 'preload',
+    as: 'style',
+    onload: 'this.onload=null;this.rel=\'stylesheet\''
+    }, name: 'layout.css'})
+}}
+```
+
+
 ## Configure a base path
 
 You should inform the browser where to find the web assets with a `base href` in your layout template. 

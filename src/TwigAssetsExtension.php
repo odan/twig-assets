@@ -54,8 +54,12 @@ final class TwigAssetsExtension extends AbstractExtension
         $params = func_get_args();
         $assets = $params[0]['files'];
         unset($params[0]['files']);
+
+        $attributes = $params[0]['attributes'] ?? [];
+        unset($params[0]['attributes']);
+
         $options = $params[0];
 
-        return $this->engine->assets($assets, $options);
+        return $this->engine->assets($assets, $options, $attributes);
     }
 }

@@ -116,10 +116,11 @@ final class TwigAssetsEngine
      *
      * @param array<mixed> $assets Assets
      * @param array<mixed> $options Options
+     * @param array<mixed> $attributes Attributes
      *
      * @return string The content
      */
-    public function assets(array $assets, array $options = []): string
+    public function assets(array $assets, array $options = [], array $attributes = []): string
     {
         $assets = $this->prepareAssets($assets);
         $options = (array)array_replace_recursive($this->options, $options);
@@ -135,8 +136,8 @@ final class TwigAssetsEngine
                 $cssFiles[] = $file;
             }
         }
-        $cssContent = $this->css($cssFiles, $options);
-        $jsContent = $this->js($jsFiles, $options);
+        $cssContent = $this->css($cssFiles, $options, $attributes);
+        $jsContent = $this->js($jsFiles, $options, $attributes);
 
         return $cssContent . $jsContent;
     }
@@ -202,10 +203,11 @@ final class TwigAssetsEngine
      *
      * @param array<mixed> $assets Array of asset that would be embed to css
      * @param array<mixed> $options Array of option / setting
+     * @param array<mixed> $customAttributes Array of attributes to override default ones
      *
      * @return string The CSS content
      */
-    public function css(array $assets, array $options): string
+    public function css(array $assets, array $options, array $customAttributes): string
     {
         $contents = [];
         $content = '';
@@ -213,12 +215,15 @@ final class TwigAssetsEngine
         foreach ($assets as $asset) {
             if ($this->isExternalUrl($asset)) {
                 // External url
-                $attributes = $this->createAttributes([
-                    'rel' => 'stylesheet',
-                    'type' => 'text/css',
-                    'href' => $asset,
-                    'media' => 'all',
-                ], $options);
+                $attributes = $this->createAttributes(array_merge(
+                    [
+                        'rel' => 'stylesheet',
+                        'type' => 'text/css',
+                        'href' => $asset,
+                        'media' => 'all',
+                    ],
+                    $customAttributes
+                ), $options);
 
                 $contents[] = $this->element('link', $attributes, '', false);
                 continue;
@@ -244,12 +249,15 @@ final class TwigAssetsEngine
             $urlBasePath = $options['url_base_path'] ?? '';
             $url = $this->publicCache->createCacheBustedUrl($name, $content, $urlBasePath);
 
-            $attributes = $this->createAttributes([
-                'rel' => 'stylesheet',
-                'type' => 'text/css',
-                'href' => $url,
-                'media' => 'all',
-            ], $options);
+            $attributes = $this->createAttributes(array_merge(
+                [
+                    'rel' => 'stylesheet',
+                    'type' => 'text/css',
+                    'href' => $url,
+                    'media' => 'all',
+                ],
+                $customAttributes
+            ), $options);
 
             $contents[] = $this->element('link', $attributes, '', false);
         }
@@ -331,10 +339,11 @@ final class TwigAssetsEngine
      *
      * @param array<mixed> $assets Assets
      * @param array<mixed> $options Options
+     * @param array<mixed> $customAttributes Array of attributes to override default ones
      *
      * @return string The content
      */
-    public function js(array $assets, array $options): string
+    public function js(array $assets, array $options, array $customAttributes): string
     {
         $contents = [];
         $content = '';
@@ -342,7 +351,13 @@ final class TwigAssetsEngine
         foreach ($assets as $asset) {
             if ($this->isExternalUrl($asset)) {
                 // External url
-                $attributes = $this->createAttributes(['src' => $asset], $options);
+                $attributes = $this->createAttributes(
+                    array_merge(
+                        ['src' => $asset],
+                        $customAttributes
+                    ),
+                    $options
+                );
                 $contents[] = $this->element('script', $attributes, '', true);
 
                 continue;
@@ -367,7 +382,13 @@ final class TwigAssetsEngine
 
             $urlBasePath = $options['url_base_path'] ?? '';
             $url = $this->publicCache->createCacheBustedUrl($name, $content, $urlBasePath);
-            $attributes = $this->createAttributes(['src' => $url], $options);
+            $attributes = $this->createAttributes(
+                array_merge(
+                    ['src' => $url],
+                    $customAttributes
+                ),
+                $options
+            );
             $contents[] = $this->element('script', $attributes, '', true);
         }
 
