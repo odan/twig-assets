@@ -4,7 +4,7 @@ Caching and compression for Twig assets (JavaScript and CSS), inspired by [Symfo
 
 [![Latest Version on Packagist](https://img.shields.io/github/release/odan/twig-assets.svg)](https://github.com/odan/twig-assets/releases)
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg)](LICENSE.md)
-[![Build Status](https://github.com/odan/twig-assets/workflows/PHP/badge.svg)](https://github.com/odan/twig-assets/actions)
+[![Build Status](https://github.com/odan/twig-assets/workflows/build/badge.svg)](https://github.com/odan/twig-assets/actions)
 [![Code Coverage](https://scrutinizer-ci.com/g/odan/twig-assets/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/odan/twig-assets/code-structure)
 [![Quality Score](https://scrutinizer-ci.com/g/odan/twig-assets/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/odan/twig-assets/?branch=master)
 [![Total Downloads](https://img.shields.io/packagist/dt/odan/twig-assets.svg)](https://packagist.org/packages/odan/twig-assets/stats)
