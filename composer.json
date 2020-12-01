@@ -27,7 +27,7 @@
     "require-dev": {
         "overtrue/phplint": "^1.1",
         "phpstan/phpstan": "*",
-        "phpunit/phpunit": "^6.0|^7.0",
+        "phpunit/phpunit": "^6.0|^7.0|^8.0",
         "mikey179/vfsstream": "^1.6",
         "squizlabs/php_codesniffer": "^3.4",
         "twig/twig": "^3.0"
