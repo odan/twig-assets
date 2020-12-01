@@ -25,7 +25,7 @@
         "mrclay/jsmin-php": "^2.4"
     },
     "require-dev": {
-        "overtrue/phplint": "^1.1",
+        "overtrue/phplint": "^1.1 || ^2.0",
         "phpstan/phpstan": "*",
         "phpunit/phpunit": "^6.0|^7.0",
         "mikey179/vfsstream": "^1.6",
