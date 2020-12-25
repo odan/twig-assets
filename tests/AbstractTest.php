@@ -59,7 +59,7 @@ abstract class AbstractTest extends TestCase
      *
      * @return void
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->options = [
             // Public assets cache directory

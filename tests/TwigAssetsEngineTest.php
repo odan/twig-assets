@@ -19,7 +19,7 @@ class TwigAssetsEngineTest extends AbstractTest
      *
      * @return void
      */
-    public function testInstance()
+    public function testInstance(): void
     {
         $extension = $this->newTwigAssetsEngineInstance();
         $this->assertInstanceOf(TwigAssetsEngine::class, $extension);

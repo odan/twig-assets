@@ -7,4 +7,5 @@ cache.properties
 .php_cs.cache
 .vscode
 vendor/
-build/ 
+build/
+.phpunit.result.cache

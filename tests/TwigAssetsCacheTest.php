@@ -17,7 +17,7 @@ class TwigAssetsCacheTest extends AbstractTest
      *
      * @return void
      */
-    public function testClearCache()
+    public function testClearCache(): void
     {
         // Public assets cache directory e.g. 'public/cache' or 'public/assets'
         $cachePath = vfsStream::url('root/public/cache');

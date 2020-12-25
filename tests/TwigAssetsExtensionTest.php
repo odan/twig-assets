@@ -17,7 +17,7 @@ class TwigAssetsExtensionTest extends AbstractTest
      *
      * @return void
      */
-    public function testInstance()
+    public function testInstance(): void
     {
         $extension = $this->newExtensionInstance();
         $this->assertInstanceOf(TwigAssetsExtension::class, $extension);
@@ -28,7 +28,7 @@ class TwigAssetsExtensionTest extends AbstractTest
      *
      * @return void
      */
-    public function testGetFunctions()
+    public function testGetFunctions(): void
     {
         $extension = $this->newExtensionInstance();
         $this->assertNotEmpty($extension->getFunctions());
@@ -39,7 +39,7 @@ class TwigAssetsExtensionTest extends AbstractTest
      *
      * @return void
      */
-    public function testJsInline()
+    public function testJsInline(): void
     {
         $file = vfsStream::newFile('test.js')->at($this->root)->setContent('alert(1);');
         $filename = $file->url();
@@ -60,21 +60,21 @@ class TwigAssetsExtensionTest extends AbstractTest
      *
      * @return void
      */
-    public function testJsDefault()
+    public function testJsDefault(): void
     {
         $file = vfsStream::newFile('test.js')->at($this->root)->setContent('alert(2);');
         $filename = $file->url();
         $actual = $this->extension->assets(['files' => [$filename], 'inline' => false]);
-        $this->assertRegExp($this->scriptInlineFileRegex, $actual);
+        $this->assertMatchesRegularExpression($this->scriptInlineFileRegex, $actual);
 
         // get from cache
         $actual2 = $this->extension->assets(['files' => [$filename], 'inline' => false]);
-        $this->assertRegExp($this->scriptInlineFileRegex, $actual2);
+        $this->assertMatchesRegularExpression($this->scriptInlineFileRegex, $actual2);
 
         // update js file, cache must be rebuild
         file_put_contents($filename, 'alert(4);');
         $actual3 = $this->extension->assets(['files' => [$filename], 'inline' => false]);
-        $this->assertRegExp($this->scriptInlineFileRegex, $actual3);
+        $this->assertMatchesRegularExpression($this->scriptInlineFileRegex, $actual3);
     }
 
     /**
@@ -82,7 +82,7 @@ class TwigAssetsExtensionTest extends AbstractTest
      *
      * @return void
      */
-    public function testJsPublic()
+    public function testJsPublic(): void
     {
         $file = vfsStream::newFile('public/test.js')->at($this->root)->setContent('alert(3);');
         $realFileUrl = $file->url();
@@ -90,16 +90,16 @@ class TwigAssetsExtensionTest extends AbstractTest
 
         // Generate
         $actual = $this->extension->assets(['files' => [$filename], 'inline' => false]);
-        $this->assertRegExp($this->scriptInlineFileRegex, $actual);
+        $this->assertMatchesRegularExpression($this->scriptInlineFileRegex, $actual);
 
         // Get from cache
         $actual2 = $this->extension->assets(['files' => [$filename], 'inline' => false]);
-        $this->assertRegExp($this->scriptInlineFileRegex, $actual2);
+        $this->assertMatchesRegularExpression($this->scriptInlineFileRegex, $actual2);
 
         // Update js file, cache must be rebuild
         file_put_contents($realFileUrl, 'alert(4);');
         $actual3 = $this->extension->assets(['files' => [$filename], 'inline' => false]);
-        $this->assertRegExp($this->scriptInlineFileRegex, $actual3);
+        $this->assertMatchesRegularExpression($this->scriptInlineFileRegex, $actual3);
         $this->assertNotSame($actual2, $actual3);
     }
 
@@ -108,7 +108,7 @@ class TwigAssetsExtensionTest extends AbstractTest
      *
      * @return void
      */
-    public function testJsWithCustomAttributes()
+    public function testJsWithCustomAttributes(): void
     {
         $file = vfsStream::newFile('public/test.js')->at($this->root)->setContent('alert(3);');
         $realFileUrl = $file->url();
@@ -118,9 +118,9 @@ class TwigAssetsExtensionTest extends AbstractTest
             [
                 'files' => [$filename],
                 'attributes' => [
-                    'type' => 'application/javascript'
+                    'type' => 'application/javascript',
                 ],
-                'inline' => false
+                'inline' => false,
             ]
         );
 
@@ -137,7 +137,7 @@ class TwigAssetsExtensionTest extends AbstractTest
      *
      * @return void
      */
-    public function testCssDefault()
+    public function testCssDefault(): void
     {
         $content = 'body {
             /* background-color: #F4F4F4; */
@@ -150,16 +150,16 @@ class TwigAssetsExtensionTest extends AbstractTest
         $file = vfsStream::newFile('test.css')->at($this->root)->setContent($content);
         $filename = $file->url();
         $actual = $this->extension->assets(['files' => [$filename], 'inline' => false]);
-        $this->assertRegExp($this->styleInlineFileRegex, $actual);
+        $this->assertMatchesRegularExpression($this->styleInlineFileRegex, $actual);
 
         // get from cache
         $actual2 = $this->extension->assets(['files' => [$filename], 'inline' => false]);
-        $this->assertRegExp($this->styleInlineFileRegex, $actual2);
+        $this->assertMatchesRegularExpression($this->styleInlineFileRegex, $actual2);
 
         // update css file, cache must be rebuild
         file_put_contents($filename, 'alert(4);');
         $actual3 = $this->extension->assets(['files' => [$filename], 'inline' => false]);
-        $this->assertRegExp($this->styleInlineFileRegex, $actual3);
+        $this->assertMatchesRegularExpression($this->styleInlineFileRegex, $actual3);
     }
 
     /**
@@ -167,7 +167,7 @@ class TwigAssetsExtensionTest extends AbstractTest
      *
      * @return void
      */
-    public function testCssWithCustomAttributes()
+    public function testCssWithCustomAttributes(): void
     {
         $content = 'body {
             /* background-color: #F4F4F4; */
@@ -182,11 +182,11 @@ class TwigAssetsExtensionTest extends AbstractTest
 
         $actual = $this->extension->assets(
             [
-                'files'  => [$filename],
+                'files' => [$filename],
                 'attributes' => [
                     'rel' => 'preload',
                     'as' => 'style',
-                    'onload' => 'this.onload=null;this.rel=\'stylesheet\''
+                    'onload' => 'this.onload=null;this.rel=\'stylesheet\'',
                 ],
                 'inline' => false,
             ]

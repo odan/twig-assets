@@ -59,7 +59,7 @@ class AssetCacheTest extends AbstractTest
     {
         $cache = $this->newInstance();
         $actual = $cache->createCacheBustedUrl(vfsStream::url('root/public/cache'), 'content', 'cache/');
-        $this->assertRegExp($this->cacheBustedRegex, $actual);
+        $this->assertMatchesRegularExpression($this->cacheBustedRegex, $actual);
     }
 
     /**
