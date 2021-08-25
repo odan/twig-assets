@@ -34,7 +34,7 @@
         "twig/twig": "^3.0"
     },
     "scripts": {
-        "check": [
+        "check-all": [
             "@lint",
             "@cs:check",
             "@sniffer:check",
