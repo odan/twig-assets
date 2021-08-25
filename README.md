@@ -84,27 +84,23 @@ composer require slim/twig-view "^3.0.0"
 Add these settings:
 
 ```php
-// Path settings
-$settings['root'] = dirname(__DIR__);
-$settings['temp'] = $settings['root'] . '/tmp';
-$settings['public'] = $settings['root'] . '/public';
-
 // View settings
 $settings['twig'] = [
-    'path' => $settings['root'] . '/templates',
+    'path' => __DIR__ . '/../templates',
     // Should be set to true in production
     'cache_enabled' => false,
-    'cache_path' => $settings['temp'] . '/twig-cache',
+    'cache_path' => __DIR__ . '/../temp/twig-cache',
 ];
 
 // Assets
 $settings['assets'] = [
     // Public assets cache directory
-    'path' => $settings['public'] . '/cache',
+    'path' => __DIR__ . '/../public/cache',
     'url_base_path' => 'cache/',
     // Cache settings
     'cache_enabled' => true,
-    'cache_path' => $settings['temp'],
+    // Internal cache directory for the assets
+    'cache_path' => __DIR__ . '/temp/assets',
     'cache_name' => 'assets-cache',
     //  Should be set to 1 (enabled) in production
     'minify' => 0,
