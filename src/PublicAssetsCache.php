@@ -42,10 +42,12 @@ final class PublicAssetsCache extends TwigAssetsCache
         $checksum = sha1($fileName . $content);
         $cacheFile = $this->directory . '/' . $name . '.' . $checksum . '.' . $extension;
 
-        file_put_contents($cacheFile, $content);
+        if (!file_exists($cacheFile)) {
+            file_put_contents($cacheFile, $content);
 
-        if ($this->chmod > -1) {
-            chmod($cacheFile, $this->chmod);
+            if ($this->chmod > -1) {
+                chmod($cacheFile, $this->chmod);
+            }
         }
 
         return $cacheFile;
