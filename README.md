@@ -78,36 +78,37 @@ Requirements
 Run:
 
 ```
-composer require slim/twig-view "^3.0.0"
+composer require slim/twig-view
 ```
 
 Add these settings:
 
 ```php
-// View settings
+// Twig settings
 $settings['twig'] = [
     'path' => __DIR__ . '/../templates',
     // Should be set to true in production
     'cache_enabled' => false,
-    'cache_path' => __DIR__ . '/../temp/twig-cache',
+    'cache_path' => __DIR__ . '/../tmp/twig-cache',
 ];
 
-// Assets
+// Twig assets cache
 $settings['assets'] = [
     // Public assets cache directory
     'path' => __DIR__ . '/../public/cache',
+    // Public url base path
     'url_base_path' => 'cache/',
-    // Cache settings
-    'cache_enabled' => true,
     // Internal cache directory for the assets
-    'cache_path' => __DIR__ . '/temp/twig-assets',
+    'cache_path' => __DIR__ . '/tmp/twig-assets',
     'cache_name' => 'assets-cache',
     //  Should be set to 1 (enabled) in production
-    'minify' => 0,
+    'minify' => 1,
 ];
 ```
 
-Add a container definition with [PHP-DI](https://github.com/slimphp/Twig-View/tree/3.x#usage)
+Add a DI container definition.
+
+*This examples uses [PHP-DI](https://github.com/slimphp/Twig-View/tree/3.x#usage)*
 
 ```php
 <?php
@@ -173,8 +174,7 @@ Create a action class, e.g. `src/Action/HomeAction.php`:
 namespace App\Action\Home;
 
 use Psr\Http\Message\ResponseInterface;
-use Slim\Http\Response;
-use Slim\Http\ServerRequest;
+use Psr\Http\Message\ServerRequestInterface;
 use Slim\Views\Twig;
 
 /**
@@ -197,15 +197,7 @@ final class HomeAction
         $this->twig = $twig;
     }
 
-    /**
-     * Action.
-     *
-     * @param ServerRequest $request The request
-     * @param Response $response The response
-     *
-     * @return ResponseInterface The response
-     */
-    public function __invoke(ServerRequest $request, Response $response): ResponseInterface
+    public function __invoke(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
         return $this->twig->render($response, 'home/home.twig');
     }
@@ -289,7 +281,7 @@ Output cached and minified CSS content inline:
 {{ assets({files: ['Login/login.css'], inline: true}) }}
 ```
 
-Output multiple CSS assests into a single .css file:
+Output multiple CSS assets into a single .css file:
 
 ```twig
 {{ assets({files: [
@@ -306,7 +298,7 @@ Output multiple CSS assests into a single .css file:
 {{ assets({files: ['Login/login.js']}) }}
 ```
 
-Output multiple JavaScript assests into a single .js file:
+Output multiple JavaScript assets into a single .js file:
 
 ```twig
 {{ assets({files: [
