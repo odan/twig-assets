@@ -45,7 +45,7 @@ final class TwigAssetsEngine
     /**
      * Default options.
      *
-     * @var array<mixed>
+     * @var array
      */
     private $options;
 
@@ -53,7 +53,7 @@ final class TwigAssetsEngine
      * Create new instance.
      *
      * @param Environment $env Twig
-     * @param array<mixed> $options The options
+     * @param array $options The options
      * - cache_adapter: The assets cache adapter. false or AbstractAdapter
      * - cache_name: Default is 'assets-cache'
      * - cache_lifetime: Default is 0
@@ -114,9 +114,9 @@ final class TwigAssetsEngine
     /**
      * Render and compress JavaScript assets.
      *
-     * @param array<mixed> $assets Assets
-     * @param array<mixed> $options Options
-     * @param array<mixed> $attributes Attributes
+     * @param array $assets Assets
+     * @param array $options Options
+     * @param array $attributes Attributes
      *
      * @return string The content
      */
@@ -145,9 +145,9 @@ final class TwigAssetsEngine
     /**
      * Resolve real asset filenames.
      *
-     * @param array<mixed> $assets Assets
+     * @param array $assets Assets
      *
-     * @return array<mixed> The assets
+     * @return array The assets
      */
     private function prepareAssets(array $assets): array
     {
@@ -178,8 +178,8 @@ final class TwigAssetsEngine
     /**
      * Get cache key.
      *
-     * @param array<mixed> $assets Assets
-     * @param array<mixed> $settings Settings
+     * @param array $assets Assets
+     * @param array $settings Settings
      *
      * @return string The cache key
      */
@@ -201,9 +201,9 @@ final class TwigAssetsEngine
     /**
      * Render and compress CSS assets.
      *
-     * @param array<mixed> $assets Array of asset that would be embed to css
-     * @param array<mixed> $options Array of option / setting
-     * @param array<mixed> $customAttributes Array of attributes to override default ones
+     * @param array $assets Array of asset that would be embed to css
+     * @param array $options Array of option / setting
+     * @param array $customAttributes Array of attributes to override default ones
      *
      * @return string The CSS content
      */
@@ -269,7 +269,7 @@ final class TwigAssetsEngine
      * Render html element.
      *
      * @param string $name The element name
-     * @param array<mixed> $attributes The attributes
+     * @param array $attributes The attributes
      * @param string $content The content
      * @param bool $closingTags Has closing tags
      *
@@ -337,9 +337,9 @@ final class TwigAssetsEngine
     /**
      * Render and compress CSS assets.
      *
-     * @param array<mixed> $assets Assets
-     * @param array<mixed> $options Options
-     * @param array<mixed> $customAttributes Array of attributes to override default ones
+     * @param array $assets Assets
+     * @param array $options Options
+     * @param array $customAttributes Array of attributes to override default ones
      *
      * @return string The content
      */
@@ -398,10 +398,10 @@ final class TwigAssetsEngine
     /**
      * Create array of html attributes.
      *
-     * @param array<mixed> $attributes The default values
-     * @param array<mixed> $options The options
+     * @param array $attributes The default values
+     * @param array $options The options
      *
-     * @return array<mixed> The html attributes
+     * @return array The html attributes
      */
     private function createAttributes(array $attributes, array $options): array
     {

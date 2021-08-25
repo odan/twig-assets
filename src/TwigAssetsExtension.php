@@ -20,7 +20,7 @@ final class TwigAssetsExtension extends AbstractExtension
      * TwigAssetsExtension constructor.
      *
      * @param Environment $env The environment
-     * @param array<mixed> $options The options
+     * @param array $options The options
      */
     public function __construct(Environment $env, array $options)
     {
@@ -30,7 +30,7 @@ final class TwigAssetsExtension extends AbstractExtension
     /**
      * Get functions.
      *
-     * @return array<mixed> The functions
+     * @return array The functions
      */
     public function getFunctions()
     {
