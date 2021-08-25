@@ -3,7 +3,7 @@
 namespace Odan\Twig;
 
 /**
- * Asset Cache for public JS ans CSS files.
+ * Asset Cache for public JS and CSS files.
  */
 final class PublicAssetsCache extends TwigAssetsCache
 {
