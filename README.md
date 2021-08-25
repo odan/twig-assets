@@ -13,7 +13,7 @@ Caching and compression for Twig assets (JavaScript and CSS), inspired by [Symfo
 ## Installation
 
 ```
-composer install odan/twig-assets
+composer require odan/twig-assets
 ```
 
 ## Requirements
@@ -100,7 +100,7 @@ $settings['assets'] = [
     // Cache settings
     'cache_enabled' => true,
     // Internal cache directory for the assets
-    'cache_path' => __DIR__ . '/temp/assets',
+    'cache_path' => __DIR__ . '/temp/twig-assets',
     'cache_name' => 'assets-cache',
     //  Should be set to 1 (enabled) in production
     'minify' => 0,
