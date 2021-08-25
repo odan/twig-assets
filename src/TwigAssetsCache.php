@@ -8,7 +8,7 @@ use RuntimeException;
 use SplFileInfo;
 
 /**
- * Asset Cache for the internal JS ans CSS files.
+ * Asset Cache for the internal JS and CSS files.
  */
 class TwigAssetsCache
 {
@@ -58,15 +58,16 @@ class TwigAssetsCache
      *
      * @param string $path Path
      *
-     * @return bool true on success or false on failure
+     * @return void
      */
-    private function removeDirectory(string $path): bool
+    private function removeDirectory(string $path)
     {
         $iterator = new DirectoryIterator($path);
         foreach ($iterator as $fileInfo) {
             if ($fileInfo->isDot() || !$fileInfo->isDir()) {
                 continue;
             }
+
             $dirName = $fileInfo->getPathname();
             $this->removeDirectory($dirName);
         }
@@ -79,6 +80,6 @@ class TwigAssetsCache
             unlink($fileName);
         }
 
-        return rmdir($path);
+        rmdir($path);
     }
 }
