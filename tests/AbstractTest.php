@@ -89,7 +89,7 @@ abstract class AbstractTest extends TestCase
         $options = [
             'path' => $templatePath,
             'cache' => false,
-            //'cache_path' =>  $config['temp'] . '/twig-cache'
+            // 'cache_path' =>  $config['temp'] . '/twig-cache'
         ];
 
         $this->env = new Environment($this->loader, $options);

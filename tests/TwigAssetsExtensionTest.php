@@ -201,7 +201,7 @@ class TwigAssetsExtensionTest extends AbstractTest
         $this->assertSame('style', $element->getAttribute('as'));
         $this->assertSame('this.onload=null;this.rel=\'stylesheet\'', $element->getAttribute('onload'));
 
-        //untouched default attribute
+        // untouched default attribute
         $this->assertSame('all', $element->getAttribute('media'));
     }
 }

@@ -1,4 +1,8 @@
 parameters:
+	level: 8
 	checkMissingIterableValueType: false
+	paths:
+		- src
+		- tests
 	ignoreErrors:
 		- '/Cannot call method getAttribute\(\) on DOMElement\|null/'
