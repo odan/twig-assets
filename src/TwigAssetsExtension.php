@@ -11,13 +11,10 @@ use Twig\TwigFunction;
  */
 final class TwigAssetsExtension extends AbstractExtension
 {
-    /**
-     * @var TwigAssetsEngine
-     */
-    private $engine;
+    private TwigAssetsEngine $engine;
 
     /**
-     * TwigAssetsExtension constructor.
+     * The constructor.
      *
      * @param Environment $env The environment
      * @param array $options The options
@@ -39,7 +36,7 @@ final class TwigAssetsExtension extends AbstractExtension
             'is_safe' => ['html'],
         ]);
 
-        $function->setArguments([]);
+        $function = $function->withDynamicArguments($function->getName(), $function->getDynamicName(), []);
 
         return [$function];
     }
