@@ -17,12 +17,12 @@ class TwigAssetsCache
      *
      * @var string Path
      */
-    protected $directory;
+    protected string $directory = '';
 
     /**
      * @var int File mode
      */
-    protected $chmod = -1;
+    protected int $chmod = -1;
 
     /**
      * Create new instance.
@@ -60,7 +60,7 @@ class TwigAssetsCache
      *
      * @return void
      */
-    private function removeDirectory(string $path)
+    private function removeDirectory(string $path): void
     {
         $iterator = new DirectoryIterator($path);
         foreach ($iterator as $fileInfo) {

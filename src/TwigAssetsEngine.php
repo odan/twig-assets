@@ -18,36 +18,18 @@ use Twig\Loader\LoaderInterface;
  */
 final class TwigAssetsEngine
 {
-    /**
-     * @var LoaderInterface
-     */
-    private $loader;
+    private LoaderInterface $loader;
 
-    /**
-     * Cache.
-     *
-     * @var AbstractAdapter|ArrayAdapter
-     */
-    private $cache;
+    private AbstractAdapter|ArrayAdapter $cache;
 
-    /**
-     * @var CssMinifier
-     */
-    private $cssMinifier;
+    private CssMinifier $cssMinifier;
 
-    /**
-     * Cache.
-     *
-     * @var PublicAssetsCache AssetCache
-     */
-    private $publicCache;
+    private PublicAssetsCache $publicCache;
 
     /**
      * Default options.
-     *
-     * @var array
      */
-    private $options;
+    private array $options = [];
 
     /**
      * Create new instance.
