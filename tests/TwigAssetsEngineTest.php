@@ -4,14 +4,14 @@ namespace Odan\Twig\Test;
 
 use Exception;
 use Odan\Twig\TwigAssetsEngine;
+use PHPUnit\Framework\Attributes\UsesClass;
+use PHPUnit\Framework\TestCase;
 
-/**
- * AssetCacheTest.
- *
- * @coversDefaultClass \Odan\Twig\TwigAssetsEngine
- */
-class TwigAssetsEngineTest extends AbstractTest
+#[UsesClass(TwigAssetsEngine::class)]
+class TwigAssetsEngineTest extends TestCase
 {
+    use TwigTestTrait;
+
     /**
      * Test create object.
      *

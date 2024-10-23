@@ -6,14 +6,10 @@ use Odan\Twig\TwigAssetsEngine;
 use Odan\Twig\TwigAssetsExtension;
 use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamDirectory;
-use PHPUnit\Framework\TestCase;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
 
-/**
- * BaseTest.
- */
-abstract class AbstractTest extends TestCase
+trait TwigTestTrait
 {
     /**
      * @var FilesystemLoader

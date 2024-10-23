@@ -2,16 +2,17 @@
 
 namespace Odan\Twig\Test;
 
+use DOMDocument;
 use Odan\Twig\TwigAssetsExtension;
 use org\bovigo\vfs\vfsStream;
+use PHPUnit\Framework\Attributes\UsesClass;
+use PHPUnit\Framework\TestCase;
 
-/**
- * AssetCacheTest.
- *
- * @coversDefaultClass \Odan\Twig\TwigAssetsExtension
- */
-class TwigAssetsExtensionTest extends AbstractTest
+#[UsesClass(TwigAssetsExtension::class)]
+class TwigAssetsExtensionTest extends TestCase
 {
+    use TwigTestTrait;
+
     /**
      * Test create object.
      *
@@ -124,7 +125,7 @@ class TwigAssetsExtensionTest extends AbstractTest
             ]
         );
 
-        $dom = new \DOMDocument();
+        $dom = new DOMDocument();
         $dom->loadHTML($actual);
         $element = $dom->getElementsByTagName('script')->item(0);
 
@@ -192,7 +193,7 @@ class TwigAssetsExtensionTest extends AbstractTest
             ]
         );
 
-        $dom = new \DOMDocument();
+        $dom = new DOMDocument();
         $dom->loadHTML($actual);
         $element = $dom->getElementsByTagName('link')->item(0);
 

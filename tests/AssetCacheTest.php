@@ -5,14 +5,14 @@ namespace Odan\Twig\Test;
 use Exception;
 use Odan\Twig\PublicAssetsCache;
 use org\bovigo\vfs\vfsStream;
+use PHPUnit\Framework\Attributes\UsesClass;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Test.
- *
- * @coversDefaultClass \Odan\Twig\PublicAssetsCache
- */
-class AssetCacheTest extends AbstractTest
+#[UsesClass(PublicAssetsCache::class)]
+class AssetCacheTest extends TestCase
 {
+    use TwigTestTrait;
+
     /**
      * @var string
      */

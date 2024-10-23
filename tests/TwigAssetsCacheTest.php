@@ -4,14 +4,14 @@ namespace Odan\Twig\Test;
 
 use Odan\Twig\TwigAssetsCache;
 use org\bovigo\vfs\vfsStream;
+use PHPUnit\Framework\Attributes\UsesClass;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Test.
- *
- * @coversDefaultClass \Odan\Twig\TwigAssetsCache
- */
-class TwigAssetsCacheTest extends AbstractTest
+#[UsesClass(TwigAssetsCache::class)]
+class TwigAssetsCacheTest extends TestCase
 {
+    use TwigTestTrait;
+
     /**
      * Test.
      *
