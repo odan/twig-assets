@@ -1,7 +1,8 @@
 {
     "name": "odan/twig-assets",
-    "type": "library",
     "description": "Caching and compression for Twig assets (JavaScript and CSS).",
+    "license": "MIT",
+    "type": "library",
     "keywords": [
         "twig",
         "assets",
@@ -10,45 +11,27 @@
         "css",
         "minify"
     ],
-    "homepage": "https://github.com/odan/twig-assets",
-    "license": "MIT",
     "authors": [
         {
             "name": "odan",
             "homepage": "https://github.com/odan"
         }
     ],
+    "homepage": "https://github.com/odan/twig-assets",
     "require": {
-        "php": "^7.4 || ^8.1",
+        "php": "8.2.* || 8.3.*",
+        "mrclay/jsmin-php": "^2.4",
         "symfony/cache": "^4.2.12 || ^5 || ^6 || ^7",
-        "tubalmartin/cssmin": "^4.1",
-        "mrclay/jsmin-php": "^2.4"
+        "tubalmartin/cssmin": "^4.1"
     },
     "require-dev": {
-        "friendsofphp/php-cs-fixer": "^2 || ^3",
-        "overtrue/phplint": "^2.3 || ^3.0",
-        "phpstan/phpstan": "0.* || 1.*",
-        "phpunit/phpunit": "^9",
-        "squizlabs/php_codesniffer": "^3.5",
+        "friendsofphp/php-cs-fixer": "^3",
         "mikey179/vfsstream": "^1.6",
+        "overtrue/phplint": "^3.0",
+        "phpstan/phpstan": "1.*",
+        "phpunit/phpunit": "^11",
+        "squizlabs/php_codesniffer": "^3.5",
         "twig/twig": "^3.0"
-    },
-    "scripts": {
-        "check-all": [
-            "@lint",
-            "@cs:check",
-            "@sniffer:check",
-            "@phpstan",
-            "@test:coverage"
-        ],
-        "cs:check": "php-cs-fixer fix --dry-run --format=txt --verbose --diff --config=.cs.php",
-        "cs:fix": "php-cs-fixer fix --config=.cs.php",
-        "lint": "phplint ./ --exclude=vendor --no-interaction --no-cache",
-        "phpstan": "phpstan analyse src tests -c phpstan.neon --no-progress --ansi",
-        "sniffer:check": "phpcs --standard=phpcs.xml",
-        "sniffer:fix": "phpcbf --standard=phpcs.xml",
-        "test": "phpunit --configuration phpunit.xml --do-not-cache-result",
-        "test:coverage": "phpunit --configuration phpunit.xml --do-not-cache-result --coverage-clover build/logs/clover.xml --coverage-html build/coverage"
     },
     "autoload": {
         "psr-4": {
@@ -59,5 +42,22 @@
         "psr-4": {
             "Odan\\Twig\\Test\\": "tests/"
         }
+    },
+    "scripts": {
+        "cs:check": "php-cs-fixer fix --dry-run --format=txt --verbose --config=.cs.php --ansi",
+        "cs:fix": "php-cs-fixer fix --config=.cs.php --ansi --verbose",
+        "sniffer:check": "phpcs --standard=phpcs.xml",
+        "sniffer:fix": "phpcbf --standard=phpcs.xml",
+        "stan": "phpstan analyse -c phpstan.neon --no-progress --ansi",
+        "test": "phpunit --configuration phpunit.xml --do-not-cache-result --colors=always --display-warnings --no-coverage",
+        "test:all": [
+            "@sniffer:check",
+            "@stan",
+            "@test:coverage"
+        ],
+        "test:coverage": [
+            "@putenv XDEBUG_MODE=coverage",
+            "phpunit --configuration phpunit.xml --do-not-cache-result --colors=always --display-warnings --display-deprecations --coverage-clover build/coverage/clover.xml --coverage-html build/coverage --coverage-text"
+        ]
     }
 }
