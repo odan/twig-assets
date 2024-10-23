@@ -12,15 +12,14 @@ return (new Config())
             '@Symfony' => true,
             'psr_autoloading' => true,
             // custom rules
-            'align_multiline_comment' => ['comment_type' => 'phpdocs_only'],
-            // psr-5
+            'align_multiline_comment' => ['comment_type' => 'phpdocs_only'], // psr-5
             'phpdoc_to_comment' => false,
             'no_superfluous_phpdoc_tags' => false,
             'array_indentation' => true,
             'array_syntax' => ['syntax' => 'short'],
             'cast_spaces' => ['space' => 'none'],
             'concat_space' => ['spacing' => 'one'],
-            'compact_nullable_typehint' => true,
+            'compact_nullable_type_declaration' => true,
             'declare_equal_normalize' => ['space' => 'single'],
             'general_phpdoc_annotation_remove' => [
                 'annotations' => [
@@ -34,8 +33,7 @@ return (new Config())
             'phpdoc_add_missing_param_annotation' => ['only_untyped' => false],
             'phpdoc_align' => false,
             'phpdoc_no_empty_return' => false,
-            'phpdoc_order' => true,
-            // psr-5
+            'phpdoc_order' => true, // psr-5
             'phpdoc_no_useless_inheritdoc' => false,
             'protected_to_private' => false,
             'yoda_style' => false,
@@ -48,11 +46,19 @@ return (new Config())
             'declare_strict_types' => false,
             'blank_line_between_import_groups' => true,
             'fully_qualified_strict_types' => true,
-            'global_namespace_import' => false,
             'no_null_property_initialization' => false,
+            'nullable_type_declaration_for_default_null_value' => false,
             'operator_linebreak' => [
                 'only_booleans' => true,
                 'position' => 'beginning',
+            ],
+            'global_namespace_import' => [
+                'import_classes' => true,
+                'import_constants' => null,
+                'import_functions' => null
+            ],
+            'class_definition' => [
+                'space_before_parenthesis' => true,
             ],
         ]
     )
