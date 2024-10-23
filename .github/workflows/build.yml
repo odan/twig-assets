@@ -8,7 +8,7 @@ jobs:
     strategy:
       matrix:
         operating-system: [ubuntu-latest]
-        php-versions: ['7.4', '8.1', '8.2', '8.3']
+        php-versions: ['8.2', '8.3']
     name: PHP ${{ matrix.php-versions }} Test on ${{ matrix.operating-system }}
 
     steps:
@@ -34,15 +34,10 @@ jobs:
       - name: Validate composer.json and composer.lock
         run: composer validate
 
-      - name: Install dependencies for PHP 7
-        if: matrix.php-versions < '8.0'
-        run: composer update --prefer-dist --no-progress
-
-      - name: Install dependencies for PHP 8
-        if: matrix.php-versions >= '8.0'
+      - name: Install dependencies
         run: composer update --prefer-dist --no-progress --ignore-platform-reqs
 
       - name: Run test suite
-        run: composer check-all
+        run: composer test:all
         env:
           PHP_CS_FIXER_IGNORE_ENV: 1
