@@ -19,7 +19,7 @@
     ],
     "homepage": "https://github.com/odan/twig-assets",
     "require": {
-        "php": "8.2.* || 8.3.*",
+        "php": "8.2.* || 8.3.* || 8.4.*",
         "mrclay/jsmin-php": "^2.4",
         "symfony/cache": "^4.2.12 || ^5 || ^6 || ^7",
         "tubalmartin/cssmin": "^4.1"
