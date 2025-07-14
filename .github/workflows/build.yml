@@ -1,14 +1,14 @@
 name: build
 
-on: [push, pull_request]
+on: [ push, pull_request ]
 
 jobs:
   run:
     runs-on: ${{ matrix.operating-system }}
     strategy:
       matrix:
-        operating-system: [ubuntu-latest]
-        php-versions: ['8.2', '8.3']
+        operating-system: [ ubuntu-latest ]
+        php-versions: [ '8.1', '8.2', '8.3', '8.4' ]
     name: PHP ${{ matrix.php-versions }} Test on ${{ matrix.operating-system }}
 
     steps:
@@ -37,7 +37,16 @@ jobs:
       - name: Install dependencies
         run: composer update --prefer-dist --no-progress --ignore-platform-reqs
 
-      - name: Run test suite
-        run: composer test:all
-        env:
-          PHP_CS_FIXER_IGNORE_ENV: 1
+      - name: Run PHP CodeSniffer
+        run: composer sniffer:check
+
+      - name: Run PHPStan
+        run: composer stan
+
+      - name: Run tests
+        if: ${{ matrix.php-versions != '8.4' }}
+        run: composer test
+
+      - name: Run tests with coverage
+        if: ${{ matrix.php-versions == '8.4' }}
+        run: composer test:coverage
